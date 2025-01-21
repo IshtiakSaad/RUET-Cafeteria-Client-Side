@@ -1,17 +1,18 @@
-import React, { useState } from "react";
 import MealsList from "./MealsList";
-import mealsData from "../assets/mockmeals.json"; // Replace with actual data path
+import mealsData from "../assets/mockmeals.json";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MealsByCategory = () => {
   const [selectedCategory, setSelectedCategory] = useState("Breakfast");
+  const navigate = useNavigate(); // React Router's navigation hook
 
   const filteredMeals = mealsData.meals.filter(
     (meal) => meal.category === selectedCategory
   );
 
   const handleDetails = (id) => {
-    console.log(`Redirect to meal details: /meal/${id}`);
-    // Implement navigation logic
+    navigate(`/meals/${id}`); // Navigate to the meal details route
   };
 
   return (

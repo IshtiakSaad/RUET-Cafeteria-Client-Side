@@ -1,7 +1,6 @@
-import React from "react";
 
 const MealCard = ({ meal, onDetailsClick }) => {
-  const { title, image, rating, price } = meal;
+  const { title, image, rating, price, id } = meal;
 
   return (
     <div className="card bg-base-100 shadow-md rounded-lg overflow-hidden">
@@ -16,7 +15,7 @@ const MealCard = ({ meal, onDetailsClick }) => {
         <p className="text-sm text-gray-600 mb-4">Price: ${price.toFixed(2)}</p>
         <button
           className="btn btn-primary w-full"
-          onClick={() => onDetailsClick(meal.id)}
+          onClick={() => onDetailsClick(id)}
         >
           Details
         </button>

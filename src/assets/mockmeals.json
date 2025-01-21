@@ -6,7 +6,18 @@
       "category": "Breakfast",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.5,
-      "price": 5.99
+      "price": 5.99,
+      "distributor": "Morning Delight Inc.",
+      "description": "Fluffy pancakes served with maple syrup and butter.",
+      "ingredients": [
+        "Flour",
+        "Eggs",
+        "Milk",
+        "Baking Powder",
+        "Butter",
+        "Maple Syrup"
+      ],
+      "postTime": "2025-01-20T08:00:00Z"
     },
     {
       "id": "2",
@@ -14,7 +25,18 @@
       "category": "Breakfast",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.7,
-      "price": 4.99
+      "price": 4.99,
+      "distributor": "Eggcellent Meals",
+      "description": "A classic omelette with cheese, tomatoes, and spinach.",
+      "ingredients": [
+        "Eggs",
+        "Cheese",
+        "Tomatoes",
+        "Spinach",
+        "Salt",
+        "Pepper"
+      ],
+      "postTime": "2025-01-20T09:00:00Z"
     },
     {
       "id": "3",
@@ -22,7 +44,11 @@
       "category": "Breakfast",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.6,
-      "price": 6.49
+      "price": 6.49,
+      "distributor": "Fresh Bites",
+      "description": "A refreshing mix of seasonal fruits.",
+      "ingredients": ["Apples", "Bananas", "Grapes", "Oranges", "Berries"],
+      "postTime": "2025-01-20T07:30:00Z"
     },
     {
       "id": "4",
@@ -30,7 +56,11 @@
       "category": "Breakfast",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.8,
-      "price": 7.99
+      "price": 7.99,
+      "distributor": "Healthy Cravings",
+      "description": "Toasted bread topped with fresh avocado slices.",
+      "ingredients": ["Bread", "Avocado", "Lime", "Salt", "Chili Flakes"],
+      "postTime": "2025-01-19T18:45:00Z"
     },
     {
       "id": "5",
@@ -38,7 +68,16 @@
       "category": "Lunch",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.7,
-      "price": 8.49
+      "price": 8.49,
+      "distributor": "Greens Galore",
+      "description": "Classic Caesar salad with croutons and parmesan cheese.",
+      "ingredients": [
+        "Romaine Lettuce",
+        "Croutons",
+        "Parmesan",
+        "Caesar Dressing"
+      ],
+      "postTime": "2025-01-19T12:00:00Z"
     },
     {
       "id": "6",
@@ -46,7 +85,17 @@
       "category": "Lunch",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.9,
-      "price": 10.99
+      "price": 10.99,
+      "distributor": "BBQ Masterpieces",
+      "description": "Juicy grilled chicken served with a side of vegetables.",
+      "ingredients": [
+        "Chicken Breast",
+        "Salt",
+        "Pepper",
+        "Garlic",
+        "Vegetables"
+      ],
+      "postTime": "2025-01-19T13:15:00Z"
     },
     {
       "id": "7",
@@ -54,7 +103,17 @@
       "category": "Lunch",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.5,
-      "price": 9.49
+      "price": 9.49,
+      "distributor": "Veggie Haven",
+      "description": "A flavorful stir fry with fresh vegetables and soy sauce.",
+      "ingredients": [
+        "Bell Peppers",
+        "Carrots",
+        "Broccoli",
+        "Soy Sauce",
+        "Garlic"
+      ],
+      "postTime": "2025-01-18T14:00:00Z"
     },
     {
       "id": "8",
@@ -62,7 +121,11 @@
       "category": "Lunch",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.6,
-      "price": 11.99
+      "price": 11.99,
+      "distributor": "Italian Delights",
+      "description": "Pasta tossed with fresh vegetables in a light sauce.",
+      "ingredients": ["Pasta", "Zucchini", "Tomatoes", "Parmesan", "Olive Oil"],
+      "postTime": "2025-01-18T12:45:00Z"
     },
     {
       "id": "9",
@@ -70,7 +133,11 @@
       "category": "Lunch",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.8,
-      "price": 12.49
+      "price": 12.49,
+      "distributor": "Burger Nation",
+      "description": "A juicy beef burger with lettuce, tomato, and cheese.",
+      "ingredients": ["Beef Patty", "Bun", "Lettuce", "Tomato", "Cheese"],
+      "postTime": "2025-01-18T11:30:00Z"
     },
     {
       "id": "10",
@@ -78,7 +145,11 @@
       "category": "Dinner",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.9,
-      "price": 15.99
+      "price": 15.99,
+      "distributor": "Seafood Bliss",
+      "description": "Freshly grilled salmon with a side of asparagus.",
+      "ingredients": ["Salmon", "Asparagus", "Lemon", "Salt", "Pepper"],
+      "postTime": "2025-01-18T19:30:00Z"
     },
     {
       "id": "11",
@@ -86,7 +157,11 @@
       "category": "Dinner",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.8,
-      "price": 18.49
+      "price": 18.49,
+      "distributor": "Steak House",
+      "description": "Tender steak served with roasted vegetables.",
+      "ingredients": ["Steak", "Potatoes", "Carrots", "Zucchini"],
+      "postTime": "2025-01-18T20:00:00Z"
     },
     {
       "id": "12",
@@ -94,7 +169,11 @@
       "category": "Dinner",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.7,
-      "price": 14.99
+      "price": 14.99,
+      "distributor": "Pasta Lovers",
+      "description": "Creamy Alfredo pasta with grilled chicken.",
+      "ingredients": ["Fettuccine", "Chicken", "Cream", "Parmesan", "Garlic"],
+      "postTime": "2025-01-17T18:30:00Z"
     },
     {
       "id": "13",
@@ -102,7 +181,17 @@
       "category": "Dinner",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.6,
-      "price": 13.49
+      "price": 13.49,
+      "distributor": "Pizza Planet",
+      "description": "Cheesy veggie pizza with a crispy crust.",
+      "ingredients": [
+        "Pizza Dough",
+        "Tomato Sauce",
+        "Mozzarella",
+        "Bell Peppers",
+        "Onions"
+      ],
+      "postTime": "2025-01-17T17:45:00Z"
     },
     {
       "id": "14",
@@ -110,31 +199,47 @@
       "category": "Dinner",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
       "rating": 4.9,
-      "price": 19.99
+      "price": 19.99,
+      "distributor": "Sushi World",
+      "description": "Assorted sushi rolls served with wasabi and soy sauce.",
+      "ingredients": ["Rice", "Seaweed", "Fish", "Cucumber", "Avocado"],
+      "postTime": "2025-01-17T19:00:00Z"
     },
     {
       "id": "15",
-      "title": "French Toast",
-      "category": "Breakfast",
+      "title": "Chocolate Cake",
+      "category": "Dessert",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
-      "rating": 4.7,
-      "price": 6.99
+      "rating": 4.8,
+      "price": 7.99,
+      "distributor": "Sweet Delights",
+      "description": "Rich chocolate cake with ganache topping.",
+      "ingredients": ["Flour", "Cocoa", "Sugar", "Butter", "Eggs"],
+      "postTime": "2025-01-17T15:00:00Z"
     },
     {
       "id": "16",
-      "title": "Chicken Sandwich",
-      "category": "Lunch",
+      "title": "Ice Cream Sundae",
+      "category": "Dessert",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
-      "rating": 4.5,
-      "price": 8.99
+      "rating": 4.9,
+      "price": 6.49,
+      "distributor": "Frosty Treats",
+      "description": "Vanilla ice cream topped with chocolate syrup and sprinkles.",
+      "ingredients": ["Vanilla Ice Cream", "Chocolate Syrup", "Sprinkles"],
+      "postTime": "2025-01-16T14:30:00Z"
     },
     {
       "id": "17",
-      "title": "Grilled Veggies",
-      "category": "Dinner",
+      "title": "Apple Pie",
+      "category": "Dessert",
       "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
-      "rating": 4.6,
-      "price": 12.49
+      "rating": 4.7,
+      "price": 5.49,
+      "distributor": "Grandma's Kitchen",
+      "description": "Classic apple pie with a flaky crust.",
+      "ingredients": ["Apples", "Flour", "Sugar", "Cinnamon", "Butter"],
+      "postTime": "2025-01-16T12:15:00Z"
     }
   ]
 }
