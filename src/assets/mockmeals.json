@@ -1,0 +1,140 @@
+{
+  "meals": [
+    {
+      "id": "1",
+      "title": "Pancakes",
+      "category": "Breakfast",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.5,
+      "price": 5.99
+    },
+    {
+      "id": "2",
+      "title": "Omelette",
+      "category": "Breakfast",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.7,
+      "price": 4.99
+    },
+    {
+      "id": "3",
+      "title": "Fruit Salad",
+      "category": "Breakfast",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.6,
+      "price": 6.49
+    },
+    {
+      "id": "4",
+      "title": "Avocado Toast",
+      "category": "Breakfast",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.8,
+      "price": 7.99
+    },
+    {
+      "id": "5",
+      "title": "Caesar Salad",
+      "category": "Lunch",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.7,
+      "price": 8.49
+    },
+    {
+      "id": "6",
+      "title": "Grilled Chicken",
+      "category": "Lunch",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.9,
+      "price": 10.99
+    },
+    {
+      "id": "7",
+      "title": "Vegetable Stir Fry",
+      "category": "Lunch",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.5,
+      "price": 9.49
+    },
+    {
+      "id": "8",
+      "title": "Pasta Primavera",
+      "category": "Lunch",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.6,
+      "price": 11.99
+    },
+    {
+      "id": "9",
+      "title": "Beef Burger",
+      "category": "Lunch",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.8,
+      "price": 12.49
+    },
+    {
+      "id": "10",
+      "title": "Grilled Salmon",
+      "category": "Dinner",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.9,
+      "price": 15.99
+    },
+    {
+      "id": "11",
+      "title": "Steak and Veggies",
+      "category": "Dinner",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.8,
+      "price": 18.49
+    },
+    {
+      "id": "12",
+      "title": "Chicken Alfredo",
+      "category": "Dinner",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.7,
+      "price": 14.99
+    },
+    {
+      "id": "13",
+      "title": "Veggie Pizza",
+      "category": "Dinner",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.6,
+      "price": 13.49
+    },
+    {
+      "id": "14",
+      "title": "Sushi Platter",
+      "category": "Dinner",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.9,
+      "price": 19.99
+    },
+    {
+      "id": "15",
+      "title": "French Toast",
+      "category": "Breakfast",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.7,
+      "price": 6.99
+    },
+    {
+      "id": "16",
+      "title": "Chicken Sandwich",
+      "category": "Lunch",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.5,
+      "price": 8.99
+    },
+    {
+      "id": "17",
+      "title": "Grilled Veggies",
+      "category": "Dinner",
+      "image": "https://cdn.vectorstock.com/i/500p/42/11/creative-concept-of-brain-food-symbolized-vector-53434211.jpg",
+      "rating": 4.6,
+      "price": 12.49
+    }
+  ]
+}
