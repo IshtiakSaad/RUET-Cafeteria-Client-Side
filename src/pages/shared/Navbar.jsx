@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import AuthContext from "../../context/AuthContext/AuthContext";
 
-const Navbar = ({ user }) => {
+const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { user, logoutUser } = useContext(AuthContext); // Access user state from AuthContext
 
   return (
     <div className="navbar bg-base-100 shadow">
@@ -97,7 +99,7 @@ const Navbar = ({ user }) => {
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <div className="w-10 rounded-full">
-                <img src={user.profilePicture} alt="User Avatar" />
+                <img src={user.photoURL} alt="User Avatar" />
               </div>
             </label>
             {isDropdownOpen && (
@@ -106,20 +108,20 @@ const Navbar = ({ user }) => {
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow"
               >
                 <li>
-                  <span>{user.username}</span>
+                  <span>{user.displayName}</span>
                 </li>
                 <li>
                   <a href="/dashboard">Dashboard</a>
                 </li>
                 <li>
-                  <button onClick={user.logout}>Logout</button>
+                  <button onClick={logoutUser}>Logout</button>
                 </li>
               </ul>
             )}
           </div>
         ) : (
           <a href="/login" className="btn">
-            Login
+            Join Us
           </a>
         )}
       </div>
