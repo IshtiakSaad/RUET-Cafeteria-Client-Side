@@ -1,5 +1,9 @@
+import { useNavigate } from "react-router-dom";
 
 const MembershipSection = () => {
+
+    const navigate = useNavigate();
+
   const membershipPlans = [
     {
       name: "Silver",
@@ -22,6 +26,7 @@ const MembershipSection = () => {
   ];
 
   const handleSubscribe = (url) => {
+    navigate('/cart')
     console.log(`Redirect to: ${url}`);
     // Implement navigation logic (e.g., using React Router)
   };

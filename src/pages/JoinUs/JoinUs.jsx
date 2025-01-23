@@ -33,7 +33,7 @@ const JoinUs = () => {
   const handleSocialLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
+      await signInWithPopup(auth, provider);
 
       // User details are automatically synced with your database via AuthProvider
       alert('Social Login Successful!');

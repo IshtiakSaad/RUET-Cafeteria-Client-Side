@@ -3,8 +3,10 @@ import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home/Home";
 import Meals from "../pages/Meals/Meals";
 import MealDetailPage from "../pages/MealDetails/MealDetailPage";
-import Login from "../pages/Login/Login";
-import JoinUs from "../pages/Login/Login";
+import JoinUs from "../pages/JoinUs/JoinUs";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import UpcomingMeals from "../pages/UpcomingMeals/UpcomingMeals";
+import Checkout from "../pages/Checkout/Checkout";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,18 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <JoinUs></JoinUs>
+      },
+      {
+        path: "/dashboard",
+        element: <Dashboard></Dashboard>
+      },
+      {
+        path: "/upcoming-meals",
+        element: <UpcomingMeals></UpcomingMeals>
+      },
+      {
+        path: '/cart',
+        element: <Checkout></Checkout>
       }
     ],
   },
