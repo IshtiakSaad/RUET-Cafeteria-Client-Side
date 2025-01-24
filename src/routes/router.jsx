@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         element: <UpcomingMeals></UpcomingMeals>
       },
       {
-        path: '/cart',
+        path: '/checkout/:packageName',
         element: <Checkout></Checkout>
       }
     ],
