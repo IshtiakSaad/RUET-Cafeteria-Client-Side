@@ -2,13 +2,15 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext); // Get the logged-in user
   const [requestedMeals, setRequestedMeals] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [allMeals, setAllMeals] = useState([]);
-  const [paymentHistory, setPaymentHistory] = useState([]);
+  //   const [paymentHistory, setPaymentHistory] = useState([]);
   const BASE_URL = "http://localhost:3000";
   const navigate = useNavigate();
 
@@ -100,6 +102,18 @@ const Dashboard = () => {
       throw error; // Propagate the error for caller to handle
     }
   };
+
+  //   Handle Payment History
+  const axiosSecure = useAxiosSecure();
+  const { data: payments = [] } = useQuery({
+    queryKey: ["payments", user.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/payments/${user.email}`);
+      return res.data;
+    },
+  });
+
+  console.log(payments);
 
   const handleDeleteReview = async (reviewId) => {
     try {
@@ -226,7 +240,7 @@ const Dashboard = () => {
       {/* Payment History Section */}
       <div className="bg-white p-6 shadow rounded">
         <h2 className="text-2xl font-semibold mb-4">Payment History</h2>
-        {paymentHistory.length > 0 ? (
+        {payments.length > 0 ? (
           <table className="w-full text-left border-collapse">
             <thead>
               <tr>
@@ -236,10 +250,10 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {paymentHistory.map((payment) => (
+              {payments.map((payment) => (
                 <tr key={payment.id}>
                   <td className="border-b p-4">{payment.transactionId}</td>
-                  <td className="border-b p-4">${payment.amount.toFixed(2)}</td>
+                  <td className="border-b p-4">${payment.price}</td>
                   <td className="border-b p-4">
                     {new Date(payment.date).toLocaleDateString()}
                   </td>

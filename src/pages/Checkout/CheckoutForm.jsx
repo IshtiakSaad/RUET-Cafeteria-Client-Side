@@ -1,19 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
-import AuthContext from "../../context/AuthContext/AuthContext";
 import useCart from "../../hooks/useCart";
+import { toast } from "react-hot-toast";
+import useAuth from "../../hooks/useAuth";
 
 const CheckoutForm = ({ packageName, price }) => {
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
   const stripe = useStripe();
-  const user = useContext(AuthContext);
+  //   const user = useContext(AuthContext);
+  const user = useAuth();
   const elements = useElements();
   const [cart, refetch] = useCart();
   const totalPrice = price;
-
+  // console.log(user.user.email, user.user.uid);
   useEffect(() => {
     axios
       .post("http://localhost:3000/create-payment-intent", {
@@ -45,17 +47,10 @@ const CheckoutForm = ({ packageName, price }) => {
 
     if (error) {
       setError(error.message);
-      console.log(error);
+      toast.error("Payment method creation failed. Please try again.");
       setProcessing(false);
       return;
     }
-
-    // Send the token and package info to your backend to complete the purchase
-    // const paymentData = {
-    //   token: token.id,
-    //   packageName,
-    //   price,
-    // };
 
     const { paymentIntent, error: confirmError } =
       await stripe.confirmCardPayment(clientSecret, {
@@ -68,27 +63,37 @@ const CheckoutForm = ({ packageName, price }) => {
       });
 
     if (confirmError) {
-      console.log("confirmError: ", confirmError);
+      toast.error("Payment confirmation failed. Please try again.");
       setProcessing(false);
-
       return;
     }
+
     if (paymentIntent.status === "succeeded") {
-      console.log(paymentIntent);
-      setProcessing(false);
+      toast.success("Payment successful! 🎉");
 
       const payment = {
-        email: user.email,
+        email: user.user.email,
+        uid: user.user.uid,
         price: totalPrice,
         date: new Date(),
         transactionId: paymentIntent.id,
-        cartId: cart.map(item => item._id),
-        menuName: cart.map(item => item.packageName),
+        cartId: cart.map((item) => item._id),
+        menuName: cart.map((item) => item.packageName),
+      };
+
+      console.log("Client: ", payment);
+
+      try {
+        const res = await axios.post("http://localhost:3000/payments", payment);
+        console.log("Payment Saved: ", res);
+
+        toast.success("Payment saved!");
+      } catch (err) {
+        console.log(err);
+        toast.error("Failed to save payment in the database.");
       }
-
-      const res = await axios.post('/payment', payment);
-      console.log("Payment Saved: ",res);
-
+      refetch();
+      setProcessing(false);
     }
   };
 

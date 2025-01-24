@@ -7,41 +7,50 @@ import JoinUs from "../pages/JoinUs/JoinUs";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import UpcomingMeals from "../pages/UpcomingMeals/UpcomingMeals";
 import Checkout from "../pages/Checkout/Checkout";
+import PrivateRoute from "../components/PrivateRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
-    errorElement: <h1>Error 404: Page Not Found</h1>, 
+    errorElement: <h1>Error 404: Page Not Found</h1>,
     children: [
       {
         path: "/",
-        element: <Home></Home>, 
+        element: <Home></Home>,
       },
       {
         path: "/meals",
-        element: <Meals></Meals>, 
+        element: <Meals></Meals>,
       },
       {
-        path: "/meals/:id", 
-        element: <MealDetailPage></MealDetailPage>, 
+        path: "/meals/:id",
+        element: <MealDetailPage></MealDetailPage>,
       },
       {
         path: "/login",
-        element: <JoinUs></JoinUs>
+        element: <JoinUs></JoinUs>,
       },
       {
         path: "/dashboard",
-        element: <Dashboard></Dashboard>
+        element: (
+          <PrivateRoute>
+            <Dashboard></Dashboard>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/upcoming-meals",
-        element: <UpcomingMeals></UpcomingMeals>
+        element: <UpcomingMeals></UpcomingMeals>,
       },
       {
-        path: '/checkout/:packageName',
-        element: <Checkout></Checkout>
-      }
+        path: "/checkout/:packageName",
+        element: (
+          <PrivateRoute>
+            <Checkout></Checkout>
+          </PrivateRoute>
+        ),
+      },
     ],
   },
 ]);
