@@ -23,6 +23,7 @@ const MealDetailPage = () => {
         setLoading(true);
         const response = await axios.get(`${BASE_URL}/meals/${id}`);
         setMeal(response.data);
+        setLikeCount(response.data.likes);
         setReviews(response.data.reviews || []);
       } catch (err) {
         console.error("Error fetching meal details:", err.message);
@@ -35,7 +36,29 @@ const MealDetailPage = () => {
   }, [id]);
 
   // Handle liking a meal
-  const handleLike = () => setLikeCount((prev) => prev + 1);
+  const handleLike = async () => {
+    if (!user) {
+      alert("You must be logged in to like this meal.");
+      return;
+    }
+
+    try {
+      // Make API call to update like count on the server
+      const response = await axios.post(`${BASE_URL}/meals/${id}/like`, {
+        userId: user.uid, // Send user ID to track who liked the meal (optional)
+      });
+
+    //   console.log(response.data.likes);
+
+      if (response.status === 200) {
+        // Update like count on the client
+        setLikeCount(response.data.likes);
+      }
+    } catch (err) {
+      console.error("Error liking the meal:", err.message);
+      alert("Failed to like the meal. Please try again later.");
+    }
+  };
 
   // Handle requesting a meal
   const handleRequestMeal = async () => {
@@ -75,19 +98,18 @@ const MealDetailPage = () => {
         content: newReview,
         rating,
       });
-    //   console.log(response);
+      //   console.log(response);
       if (response.status === 200) {
-
         try {
-            setLoading(true);
-            const response = await axios.get(`${BASE_URL}/meals/${id}`);
-            setReviews(response.data.reviews);
-          } catch (err) {
-            console.error("Error fetching meal reviews:", err.message);
-            setError("Failed to load meal reviews. Please try again later.");
-          } finally {
-            setLoading(false);
-          }
+          setLoading(true);
+          const response = await axios.get(`${BASE_URL}/meals/${id}`);
+          setReviews(response.data.reviews);
+        } catch (err) {
+          console.error("Error fetching meal reviews:", err.message);
+          setError("Failed to load meal reviews. Please try again later.");
+        } finally {
+          setLoading(false);
+        }
 
         // console.log(reviews);
 
@@ -134,7 +156,7 @@ const MealDetailPage = () => {
             Price: ${meal?.price || "N/A"}
           </p>
           <button onClick={handleLike} className="btn btn-primary mr-4">
-            Like ({likeCount})
+            {likeCount>0? `${likeCount} Like`: "Like (0)"}
           </button>
           <button onClick={handleRequestMeal} className="btn btn-secondary">
             Request Meal

@@ -1,28 +1,34 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext); // Get the logged-in user
   const [requestedMeals, setRequestedMeals] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [allMeals, setAllMeals] = useState([]);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const BASE_URL = "http://localhost:3000";
+  const navigate = useNavigate();
 
   // Fetch data for the user dashboard
   useEffect(() => {
+    let isMounted = true;
+
     if (user) {
       const fetchData = async () => {
         try {
           const mealsResponse = await axios.get(
             `${BASE_URL}/users/${user.uid}/favorites`
           );
-          //   const reviewsResponse = await axios.get(`/reviews?uid=${user.uid}`);
-          //   const paymentsResponse = await axios.get(`/payments?uid=${user.uid}`);
+          const resMeals = (await axios.get(`${BASE_URL}/meals`)).data;
 
-          setRequestedMeals(mealsResponse.data);
-          //   setReviews(reviewsResponse.data);
-          //   setPaymentHistory(paymentsResponse.data);
+          if (isMounted) {
+            setAllMeals(resMeals);
+            setRequestedMeals(mealsResponse.data);
+            // console.log("Fetched Meals:", resMeals);
+          }
         } catch (error) {
           console.error("Error fetching dashboard data:", error);
         }
@@ -30,7 +36,39 @@ const Dashboard = () => {
 
       fetchData();
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [user]);
+
+  useEffect(() => {
+    const extractedReviews = [];
+
+    allMeals.map((meal) => {
+      if (meal.reviews) {
+        meal.reviews.map((review) => {
+          if (user.uid === review.userId) {
+            // Push the relevant data into the temporary array
+            extractedReviews.push({
+              mealId: meal._id,
+              mealTitle: meal.title,
+              content: review.content,
+              rating: review.rating,
+              postedAt: review.postedAt,
+            });
+          }
+          console.log(extractedReviews);
+        });
+      }
+    });
+
+    setReviews(extractedReviews);
+  }, [allMeals]);
+
+  const handleDetails = (id) => {
+    navigate(`/meals/${id}`); // Navigate to the meal details route
+  };
 
   const handleCancelRequest = async (mealId) => {
     try {
@@ -51,9 +89,9 @@ const Dashboard = () => {
 
       if (response.ok) {
         setRequestedMeals((prev) => {
-            const updated = prev.filter((fav) => fav._id !== mealId);
-            console.log("Updated favorites:", updated);
-            return updated;
+          const updated = prev.filter((fav) => fav._id !== mealId);
+          console.log("Updated favorites:", updated);
+          return updated;
         });
       }
       return result; // Return the successful result
@@ -116,8 +154,8 @@ const Dashboard = () => {
               {requestedMeals.map((meal) => (
                 <tr key={meal._id}>
                   <td className="border-b p-4">{meal.title}</td>
-                  <td className="border-b p-4">{meal.likes}</td>
-                  <td className="border-b p-4">{meal.reviews_count}</td>
+                  <td className="border-b p-4">{meal.likes || 0}</td>
+                  <td className="border-b p-4">{meal.reviews?.length || 0}</td>
                   <td className="border-b p-4">{meal.status}</td>
                   <td className="border-b p-4">
                     <button
@@ -144,7 +182,7 @@ const Dashboard = () => {
             <thead>
               <tr>
                 <th className="border-b p-4">Meal Title</th>
-                <th className="border-b p-4">Likes</th>
+                <th className="border-b p-4">Rating</th>
                 <th className="border-b p-4">Review</th>
                 <th className="border-b p-4">Actions</th>
               </tr>
@@ -153,8 +191,8 @@ const Dashboard = () => {
               {reviews.map((review) => (
                 <tr key={review.id}>
                   <td className="border-b p-4">{review.mealTitle}</td>
-                  <td className="border-b p-4">{review.likes}</td>
-                  <td className="border-b p-4">{review.review}</td>
+                  <td className="border-b p-4">{review.rating}</td>
+                  <td className="border-b p-4">{review.content}</td>
                   <td className="border-b p-4 space-x-2">
                     <button
                       className="text-blue-600 hover:underline"
@@ -169,7 +207,8 @@ const Dashboard = () => {
                       Delete
                     </button>
                     <button
-                      onClick={() => alert(`View meal ${review.mealId}`)}
+                      // navigate(`/meals/${id}`)
+                      onClick={() => handleDetails(review.mealId)}
                       className="text-indigo-600 hover:underline"
                     >
                       View Meal
