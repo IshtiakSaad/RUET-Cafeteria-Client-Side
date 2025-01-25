@@ -12,10 +12,8 @@ const AdminProfile = () => {
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        // Set the admin info
         setAdminInfo(user);
 
-        // Only fetch meal count if user email exists
         if (user?.email) {
           const mealResponse = await axiosSecure.get(`/meals/count/${user.email}`);
           setMealCount(mealResponse.data.count);
@@ -31,23 +29,25 @@ const AdminProfile = () => {
   }, [user, axiosSecure]);
 
   if (!adminInfo) {
-    return <div className="text-white">Loading admin profile...</div>;
+    return <div className="text-center text-gray-600">Loading admin profile...</div>;
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 p-8">
-      <div className="max-w-md mx-auto bg-white/10 backdrop-blur-lg p-6 rounded-lg shadow-md border border-gray-700">
+    <div className="max-w-lg mx-auto p-8 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
+      <div className="text-center">
         <img
           src={adminInfo.photoURL || "/default-avatar.png"}
           alt="Admin Avatar"
-          className="w-24 h-24 mx-auto rounded-full shadow-lg mb-4"
+          className="w-28 h-28 mx-auto rounded-full shadow-lg border-4 border-gray-200"
         />
-        <h2 className="text-2xl font-bold text-white text-center mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 mt-4">
           {adminInfo.displayName || "Admin Name"}
         </h2>
-        <p className="text-gray-300 text-center mb-4">{adminInfo.email}</p>
-        <p className="text-lg text-white font-semibold text-center">
-          Meals Added: <span className="text-green-400">{mealCount}</span>
+        <p className="text-gray-600">{adminInfo.email}</p>
+      </div>
+      <div className="mt-6 bg-white shadow rounded-lg p-6">
+        <p className="text-center text-lg text-gray-800">
+          Meals Added: <span className="text-indigo-600 font-semibold">{mealCount}</span>
         </p>
       </div>
     </div>
