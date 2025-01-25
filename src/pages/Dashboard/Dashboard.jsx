@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
+import AdminDashboard from "./AdminDashboard";
 
 const Dashboard = () => {
   //   const { user } = useContext(AuthContext); // Get the logged-in user
@@ -13,10 +14,15 @@ const Dashboard = () => {
   const [reviews, setReviews] = useState([]);
   const [badge, setBadge] = useState("");
   const [allMeals, setAllMeals] = useState([]);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
   //   const [paymentHistory, setPaymentHistory] = useState([]);
   const BASE_URL = "http://localhost:3000";
   const navigate = useNavigate();
   //   console.log("User:", user);
+
+  const handleAdminPanelClick = () => {
+    setShowAdminPanel((prev) => !prev); // Toggle the admin panel visibility
+  };
 
   // Fetch data for the user dashboard
   useEffect(() => {
@@ -153,144 +159,166 @@ const Dashboard = () => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center">Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">{showAdminPanel ? "Admin" : "User"} Dashboard</h1>
+      {/* Admin Dashboard */}
+      <div className="p-6">
+        <button
+          onClick={handleAdminPanelClick}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+        >
+          {showAdminPanel ? "Close Admin Panel" : "Admin Panel"}
+        </button>
 
-      {/* My Profile Section */}
-      <div className="bg-white p-6 shadow rounded mb-8">
-        <h2 className="text-2xl font-semibold mb-4">My Profile</h2>
-        {user && (
-          <div className="flex items-center space-x-4">
-            <img
-              src={user.user.photoURL || "https://via.placeholder.com/100"}
-              alt="Profile"
-              className="w-20 h-20 rounded-full border"
-            />
-            <div>
-              <p className="text-lg font-medium">
-                {user.user.displayName || "Anonymous"}
-              </p>
-              <p className="text-gray-600">{user.user.email}</p>
-              <p className="text-gray-600">Badge: {badge}</p>
-            </div>
+        {showAdminPanel && (
+          <div className="mt-6">
+            <AdminDashboard />
           </div>
         )}
       </div>
 
-      {/* Requested Meals Section */}
-      <div className="bg-white p-6 shadow rounded mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Requested Meals</h2>
-        {requestedMeals.length > 0 ? (
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr>
-                <th className="border-b p-4">Meal Title</th>
-                <th className="border-b p-4">Likes</th>
-                <th className="border-b p-4">Reviews Count</th>
-                <th className="border-b p-4">Status</th>
-                <th className="border-b p-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requestedMeals.map((meal) => (
-                <tr key={meal._id}>
-                  <td className="border-b p-4">{meal.title}</td>
-                  <td className="border-b p-4">{meal.likes || 0}</td>
-                  <td className="border-b p-4">{meal.reviews?.length || 0}</td>
-                  <td className="border-b p-4">{meal.status}</td>
-                  <td className="border-b p-4">
-                    <button
-                      onClick={() => handleCancelRequest(meal._id)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Cancel
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p className="text-gray-600">No requested meals found.</p>
-        )}
-      </div>
+      {/* User Dashboard */}
+      {!showAdminPanel && (
+        <div>
+          {/* My Profile Section */}
+          <div className="bg-white p-6 shadow rounded mb-8">
+            <h2 className="text-2xl font-semibold mb-4">My Profile</h2>
+            {user && (
+              <div className="flex items-center space-x-4">
+                <img
+                  src={user.user.photoURL || "https://via.placeholder.com/100"}
+                  alt="Profile"
+                  className="w-20 h-20 rounded-full border"
+                />
+                <div>
+                  <p className="text-lg font-medium">
+                    {user.user.displayName || "Anonymous"}
+                  </p>
+                  <p className="text-gray-600">{user.user.email}</p>
+                  <p className="text-gray-600">Badge: {badge}</p>
+                </div>
+              </div>
+            )}
+          </div>
 
-      {/* My Reviews Section */}
-      <div className="bg-white p-6 shadow rounded mb-8">
-        <h2 className="text-2xl font-semibold mb-4">My Reviews</h2>
-        {reviews.length > 0 ? (
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr>
-                <th className="border-b p-4">Meal Title</th>
-                <th className="border-b p-4">Rating</th>
-                <th className="border-b p-4">Review</th>
-                <th className="border-b p-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reviews.map((review) => (
-                <tr key={review.id}>
-                  <td className="border-b p-4">{review.mealTitle}</td>
-                  <td className="border-b p-4">{review.rating}</td>
-                  <td className="border-b p-4">{review.content}</td>
-                  <td className="border-b p-4 space-x-2">
-                    <button
-                      className="text-blue-600 hover:underline"
-                      onClick={() => alert(`Edit review ${review.id}`)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteReview(review.id)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
-                    <button
-                      // navigate(`/meals/${id}`)
-                      onClick={() => handleDetails(review.mealId)}
-                      className="text-indigo-600 hover:underline"
-                    >
-                      View Meal
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p className="text-gray-600">No reviews found.</p>
-        )}
-      </div>
+          {/* Requested Meals Section */}
+          <div className="bg-white p-6 shadow rounded mb-8">
+            <h2 className="text-2xl font-semibold mb-4">Requested Meals</h2>
+            {requestedMeals.length > 0 ? (
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr>
+                    <th className="border-b p-4">Meal Title</th>
+                    <th className="border-b p-4">Likes</th>
+                    <th className="border-b p-4">Reviews Count</th>
+                    <th className="border-b p-4">Status</th>
+                    <th className="border-b p-4">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {requestedMeals.map((meal) => (
+                    <tr key={meal._id}>
+                      <td className="border-b p-4">{meal.title}</td>
+                      <td className="border-b p-4">{meal.likes || 0}</td>
+                      <td className="border-b p-4">
+                        {meal.reviews?.length || 0}
+                      </td>
+                      <td className="border-b p-4">{meal.status}</td>
+                      <td className="border-b p-4">
+                        <button
+                          onClick={() => handleCancelRequest(meal._id)}
+                          className="text-red-600 hover:underline"
+                        >
+                          Cancel
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-gray-600">No requested meals found.</p>
+            )}
+          </div>
 
-      {/* Payment History Section */}
-      <div className="bg-white p-6 shadow rounded">
-        <h2 className="text-2xl font-semibold mb-4">Payment History</h2>
-        {payments.length > 0 ? (
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr>
-                <th className="border-b p-4">Transaction ID</th>
-                <th className="border-b p-4">Amount</th>
-                <th className="border-b p-4">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {payments.map((payment) => (
-                <tr key={payment.id}>
-                  <td className="border-b p-4">{payment.transactionId}</td>
-                  <td className="border-b p-4">${payment.price}</td>
-                  <td className="border-b p-4">
-                    {new Date(payment.date).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p className="text-gray-600">No payment history found.</p>
-        )}
-      </div>
+          {/* My Reviews Section */}
+          <div className="bg-white p-6 shadow rounded mb-8">
+            <h2 className="text-2xl font-semibold mb-4">My Reviews</h2>
+            {reviews.length > 0 ? (
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr>
+                    <th className="border-b p-4">Meal Title</th>
+                    <th className="border-b p-4">Rating</th>
+                    <th className="border-b p-4">Review</th>
+                    <th className="border-b p-4">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reviews.map((review) => (
+                    <tr key={review.id}>
+                      <td className="border-b p-4">{review.mealTitle}</td>
+                      <td className="border-b p-4">{review.rating}</td>
+                      <td className="border-b p-4">{review.content}</td>
+                      <td className="border-b p-4 space-x-2">
+                        <button
+                          className="text-blue-600 hover:underline"
+                          onClick={() => alert(`Edit review ${review.id}`)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteReview(review.id)}
+                          className="text-red-600 hover:underline"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          // navigate(`/meals/${id}`)
+                          onClick={() => handleDetails(review.mealId)}
+                          className="text-indigo-600 hover:underline"
+                        >
+                          View Meal
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-gray-600">No reviews found.</p>
+            )}
+          </div>
+
+          {/* Payment History Section */}
+          <div className="bg-white p-6 shadow rounded">
+            <h2 className="text-2xl font-semibold mb-4">Payment History</h2>
+            {payments.length > 0 ? (
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr>
+                    <th className="border-b p-4">Transaction ID</th>
+                    <th className="border-b p-4">Amount</th>
+                    <th className="border-b p-4">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {payments.map((payment) => (
+                    <tr key={payment.id}>
+                      <td className="border-b p-4">{payment.transactionId}</td>
+                      <td className="border-b p-4">${payment.price}</td>
+                      <td className="border-b p-4">
+                        {new Date(payment.date).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-gray-600">No payment history found.</p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
