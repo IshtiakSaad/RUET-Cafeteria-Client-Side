@@ -16,7 +16,7 @@ const MealDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const BASE_URL = "http://localhost:3000";
   const navigate = useNavigate();
-  const [currentMeal, setCurrentMeal] = useState('');
+  const [currentMeal, setCurrentMeal] = useState("");
   const axiosSecure = useAxiosSecure();
 
   // Fetch meal details
@@ -57,13 +57,11 @@ const MealDetailPage = () => {
 
       // If likes reach 10, set status to Available (publish)
       if (response.data.likes >= 10 && currentMeal !== "Available") {
-        console.log(currentMeal);
         setCurrentMeal("Available");
         await axiosSecure.put(`/update-meals/${id}`, { status: "Available" });
       }
     } catch (err) {
       console.error("Error liking the meal:", err.message);
-    //   alert("Failed to like the meal. Please try again later.");
     }
   };
 
@@ -109,6 +107,7 @@ const MealDetailPage = () => {
         setLoading(true);
         const response = await axios.get(`${BASE_URL}/meals/${id}`);
         setReviews(response.data.reviews);
+        setLoading(false);
         setNewReview("");
         setRating(0);
       }
@@ -118,98 +117,121 @@ const MealDetailPage = () => {
   };
 
   // Loader state
-  if (loading) return <p>Loading meal details...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-lg text-gray-700">Loading meal details...</p>
+      </div>
+    );
 
   // Error state
-  if (error) return <p className="text-center text-red-500">{error}</p>;
+  if (error)
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-center text-red-500">{error}</p>
+      </div>
+    );
 
   // Render component
   return (
-    <div className="w-3/4 mx-auto p-6">
-      <div className="flex flex-col lg:flex-row items-start">
-        <img
-          src={meal?.image || "default-image.jpg"}
-          alt={meal?.title || "Meal"}
-          className="w-full lg:w-1/2 rounded-lg shadow-md"
-        />
-        <div className="lg:ml-6 flex-1">
-          <h1 className="text-3xl font-bold mb-4">{meal?.title || "Meal"}</h1>
-          <p className="text-gray-700 mb-2">{meal?.description || "N/A"}</p>
-          <p className="text-sm text-gray-500 mb-4">
-            Posted by: {meal?.distributor || "Unknown"} |{" "}
-            {meal?.postTime
-              ? new Date(meal.postTime).toLocaleDateString()
-              : "Unknown Date"}
-          </p>
-          <p className="text-lg font-semibold mb-4">
-            Ingredients:{" "}
-            {meal?.ingredients?.join(", ") || "No ingredients listed"}
-          </p>
-          <p className="text-lg font-bold mb-4">
-            Rating: {meal?.rating || 0}/5.0
-          </p>
-          <p className="text-lg font-bold mb-4">
-            Price: ${meal?.price || "N/A"}
-          </p>
-          <button onClick={handleLike} className="btn btn-primary mr-4">
-            {likeCount > 0 ? `${likeCount} Like` : "Like (0)"}
-          </button>
-
-          {/* Show the "Request Meal" button if likes >= 10 */}
-          {currentMeal === "Available" && (
-            <button onClick={handleRequestMeal} className="btn btn-secondary">
-              Request Meal
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Review Section */}
-      <div className="mt-10">
-        <h2 className="text-2xl font-bold mb-4">
-          Reviews ({Array.isArray(reviews) ? reviews.length : 0})
-        </h2>
-        {Array.isArray(reviews) && reviews.length > 0 ? (
-          <div className="space-y-4">
-            {reviews.map((review) => (
-              <div
-                key={review._id}
-                className="p-4 bg-gray-100 rounded-lg shadow"
+    <div className="min-h-screen bg-gradient-to-tr from-gray-100 via-white to-gray-200 p-8">
+      <div className="w-full lg:w-3/4 mx-auto bg-white/90 shadow-lg rounded-2xl p-8">
+        <div className="flex flex-col lg:flex-row items-start gap-6">
+          <img
+            src={meal?.image || "default-image.jpg"}
+            alt={meal?.title || "Meal"}
+            className="w-full lg:w-1/2 rounded-lg shadow-md"
+          />
+          <div className="flex-1">
+            <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
+              {meal?.title || "Meal"}
+            </h1>
+            <p className="text-gray-700 text-lg mb-2">
+              {meal?.description || "N/A"}
+            </p>
+            <p className="text-sm text-gray-500 mb-4">
+              Posted by: {meal?.distributor || "Unknown"} |{" "}
+              {meal?.postTime
+                ? new Date(meal.postTime).toLocaleDateString()
+                : "Unknown Date"}
+            </p>
+            <p className="text-lg font-semibold mb-4">
+              Ingredients:{" "}
+              {meal?.ingredients?.join(", ") || "No ingredients listed"}
+            </p>
+            <p className="text-lg font-bold mb-4">
+              Rating: {meal?.rating || 0}/5.0
+            </p>
+            <p className="text-lg font-bold mb-4">
+              Price: ${meal?.price || "N/A"}
+            </p>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={handleLike}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
               >
-                <p className="font-semibold">{review.content}</p>
-                <p className="text-sm text-gray-500">
-                  Rating: {review.rating} / 5
-                </p>
-                <p className="text-sm text-gray-400">
-                  Posted on: {new Date(review.postedAt).toLocaleString()}
-                </p>
-              </div>
-            ))}
+                {likeCount > 0 ? `${likeCount} Like` : "Like (0)"}
+              </button>
+              {currentMeal === "Available" && (
+                <button
+                  onClick={handleRequestMeal}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition duration-300"
+                >
+                  Request Meal
+                </button>
+              )}
+            </div>
           </div>
-        ) : (
-          <p className="text-gray-500">
-            No reviews yet. Be the first to review!
-          </p>
-        )}
+        </div>
 
-        <div className="mt-6">
-          <textarea
-            placeholder="Write a review..."
-            value={newReview}
-            onChange={(e) => setNewReview(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
-          />
-          <input
-            type="number"
-            max="5"
-            min="1"
-            value={rating}
-            onChange={(e) => setRating(Number(e.target.value))}
-            className="w-full px-4 py-2 border rounded-md my-2"
-          />
-          <button onClick={handlePostReview} className="btn btn-primary">
-            Post Review
-          </button>
+        {/* Review Section */}
+        <div className="mt-10">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            Reviews ({Array.isArray(reviews) ? reviews.length : 0})
+          </h2>
+          {Array.isArray(reviews) && reviews.length > 0 ? (
+            <div className="space-y-6">
+              {reviews.map((review) => (
+                <div
+                  key={review._id}
+                  className="p-6 bg-gray-50 rounded-xl shadow"
+                >
+                  <p className="text-lg font-semibold">{review.content}</p>
+                  <p className="text-sm text-gray-500">
+                    Rating: {review.rating} / 5
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Posted on: {new Date(review.postedAt).toLocaleString()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">No reviews yet. Be the first to review!</p>
+          )}
+
+          <div className="mt-8">
+            <textarea
+              placeholder="Write a review..."
+              value={newReview}
+              onChange={(e) => setNewReview(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow"
+            />
+            <input
+              type="number"
+              max="5"
+              min="1"
+              value={rating}
+              onChange={(e) => setRating(Number(e.target.value))}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow mt-4"
+            />
+            <button
+              onClick={handlePostReview}
+              className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg shadow-lg hover:bg-purple-700 transition duration-300"
+            >
+              Post Review
+            </button>
+          </div>
         </div>
       </div>
     </div>

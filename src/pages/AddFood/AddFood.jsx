@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -14,31 +15,68 @@ const AddFood = () => {
   } = useForm();
   const navigate = useNavigate();
   const user = useAuth();
-  console.log(user);
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    const foodData = {
-      ...data,
-      rating: parseFloat(data.rating),
-      price: parseFloat(data.price),
-      ingredients: data.ingredients
-        .split(",")
-        .map((ingredient) => ingredient.trim()),
-      postTime: new Date().toISOString(),
-      likes: 0,
-      reviews: [],
-      distributorName: user.user.displayName,
-      distributorEmail: user.user.email,
-      status: "Upcoming",
-    };
-    console.log("Ready: ",foodData);
+  const imageBBKey = "de16ed097feb2e2f18b42f490e78e9cc"; // ImageBB API key
+  const [imageFile, setImageFile] = useState(null); // State to store the selected image file
+  const [imageError, setImageError] = useState(""); // State for image error messages
+
+  // Function to upload the image to ImageBB and return the image URL
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
 
     try {
-      const response = await axiosSecure.post(
-        "http://localhost:3000/meals",
-        foodData
+      const response = await fetch(
+        `https://api.imgbb.com/1/upload?key=${imageBBKey}`,
+        {
+          method: "POST",
+          body: formData,
+        }
       );
+      const result = await response.json();
+
+      if (result.success) {
+        return result.data.url; // Return the image URL
+      } else {
+        throw new Error("Image upload failed.");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error.message);
+      throw error;
+    }
+  };
+
+  // Handle form submission
+  const onSubmit = async (data) => {
+    try {
+      // Validate image file
+      if (!imageFile) {
+        setImageError("Please upload an image");
+        return;
+      }
+
+      // Upload image and get the URL
+      const imageUrl = await uploadImage(imageFile);
+
+      // Prepare food data
+      const foodData = {
+        ...data,
+        image: imageUrl,
+        rating: parseFloat(data.rating),
+        price: parseFloat(data.price),
+        ingredients: data.ingredients
+          .split(",")
+          .map((ingredient) => ingredient.trim()),
+        postTime: new Date().toISOString(),
+        likes: 0,
+        reviews: [],
+        distributorName: user.user.displayName,
+        distributorEmail: user.user.email,
+        status: "Upcoming",
+      };
+
+      // Post the food data to the server
+      const response = await axiosSecure.post("http://localhost:3000/meals", foodData);
 
       if (response.status === 201 || response.status === 200) {
         toast.success("Food added successfully!");
@@ -46,9 +84,7 @@ const AddFood = () => {
         reset();
       }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || error.message || "Failed to add food.";
-      toast.error(errorMessage);
+      toast.error(error.message || "Failed to add food.");
     }
   };
 
@@ -59,6 +95,7 @@ const AddFood = () => {
           Add Food
         </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Title Field */}
           <div>
             <label className="block text-sm font-medium text-gray-300">
               Title
@@ -70,12 +107,11 @@ const AddFood = () => {
               className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
             />
             {errors.title && (
-              <p className="text-red-400 text-sm mt-1">
-                {errors.title.message}
-              </p>
+              <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>
             )}
           </div>
 
+          {/* Category Field */}
           <div>
             <label className="block text-sm font-medium text-gray-300">
               Category
@@ -93,23 +129,7 @@ const AddFood = () => {
             )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-300">
-              Image URL
-            </label>
-            <input
-              type="url"
-              {...register("image", { required: "Image URL is required" })}
-              placeholder="Enter image URL"
-              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
-            />
-            {errors.image && (
-              <p className="text-red-400 text-sm mt-1">
-                {errors.image.message}
-              </p>
-            )}
-          </div>
-
+          {/* Rating Field */}
           <div>
             <label className="block text-sm font-medium text-gray-300">
               Rating
@@ -117,21 +137,16 @@ const AddFood = () => {
             <input
               type="number"
               step="0.1"
-              {...register("rating", {
-                required: "Rating is required",
-                min: { value: 0, message: "Rating must be at least 0" },
-                max: { value: 5, message: "Rating cannot exceed 5" },
-              })}
-              placeholder="Enter rating (e.g., 4.5)"
+              {...register("rating", { required: "Rating is required" })}
+              placeholder="Enter food rating (e.g., 4.5)"
               className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
             />
             {errors.rating && (
-              <p className="text-red-400 text-sm mt-1">
-                {errors.rating.message}
-              </p>
+              <p className="text-red-400 text-sm mt-1">{errors.rating.message}</p>
             )}
           </div>
 
+          {/* Price Field */}
           <div>
             <label className="block text-sm font-medium text-gray-300">
               Price
@@ -140,26 +155,38 @@ const AddFood = () => {
               type="number"
               step="0.01"
               {...register("price", { required: "Price is required" })}
-              placeholder="Enter price (e.g., 5.99)"
+              placeholder="Enter food price"
               className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
             />
             {errors.price && (
-              <p className="text-red-400 text-sm mt-1">
-                {errors.price.message}
-              </p>
+              <p className="text-red-400 text-sm mt-1">{errors.price.message}</p>
             )}
           </div>
 
+          {/* Image Upload Field */}
+          <div>
+            <label className="block text-sm font-medium text-gray-300">
+              Upload Image
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files[0])}
+              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
+            />
+            {imageError && (
+              <p className="text-red-400 text-sm mt-1">{imageError}</p>
+            )}
+          </div>
 
+          {/* Description Field */}
           <div>
             <label className="block text-sm font-medium text-gray-300">
               Description
             </label>
             <textarea
-              {...register("description", {
-                required: "Description is required",
-              })}
-              placeholder="Enter description"
+              {...register("description", { required: "Description is required" })}
+              placeholder="Enter food description"
               className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
               rows="3"
             ></textarea>
@@ -170,6 +197,7 @@ const AddFood = () => {
             )}
           </div>
 
+          {/* Ingredients Field */}
           <div>
             <label className="block text-sm font-medium text-gray-300">
               Ingredients
@@ -189,6 +217,7 @@ const AddFood = () => {
             )}
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-lg shadow-md hover:from-purple-700 hover:to-indigo-700 transition-transform transform hover:scale-105"
