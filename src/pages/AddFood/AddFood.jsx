@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
 
 const AddFood = () => {
   const axiosSecure = useAxiosSecure();
@@ -12,6 +13,8 @@ const AddFood = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  const user = useAuth();
+  console.log(user);
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -25,8 +28,11 @@ const AddFood = () => {
       postTime: new Date().toISOString(),
       likes: 0,
       reviews: [],
+      distributorName: user.user.displayName,
+      distributorEmail: user.user.email,
       status: "Upcoming",
     };
+    console.log("Ready: ",foodData);
 
     try {
       const response = await axiosSecure.post(
@@ -144,24 +150,6 @@ const AddFood = () => {
             )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-300">
-              Distributor
-            </label>
-            <input
-              type="text"
-              {...register("distributor", {
-                required: "Distributor is required",
-              })}
-              placeholder="Enter distributor name"
-              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
-            />
-            {errors.distributor && (
-              <p className="text-red-400 text-sm mt-1">
-                {errors.distributor.message}
-              </p>
-            )}
-          </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-300">

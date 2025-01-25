@@ -121,7 +121,7 @@ const ManageFoods = () => {
                   <td className="border border-gray-700 px-4 py-2">
                     {meal.rating.toFixed(1)}
                   </td>
-                  <td className="border border-gray-700 px-4 py-2">{meal.distributor}</td>
+                  <td className="border border-gray-700 px-4 py-2">{meal.distributorName || meal.distributor}</td>
                   <td className="border border-gray-700 px-4 py-2 space-x-2">
                     <button
                       onClick={() => navigate(`/meals/${meal._id}`)}
