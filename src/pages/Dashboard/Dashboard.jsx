@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import AdminDashboard from "./AdminDashboard";
+import useAdmin from "../../hooks/useAdmin";
 
 const Dashboard = () => {
   //   const { user } = useContext(AuthContext); // Get the logged-in user
@@ -15,6 +16,7 @@ const Dashboard = () => {
   const [badge, setBadge] = useState("");
   const [allMeals, setAllMeals] = useState([]);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [isAdmin] = useAdmin();
   //   const [paymentHistory, setPaymentHistory] = useState([]);
   const BASE_URL = "http://localhost:3000";
   const navigate = useNavigate();
@@ -159,22 +161,27 @@ const Dashboard = () => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center">{showAdminPanel ? "Admin" : "User"} Dashboard</h1>
-      {/* Admin Dashboard */}
-      <div className="p-6">
-        <button
-          onClick={handleAdminPanelClick}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-        >
-          {showAdminPanel ? "Close Admin Panel" : "Admin Panel"}
-        </button>
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        {showAdminPanel ? "Admin" : "User"} Dashboard
+      </h1>
 
-        {showAdminPanel && (
-          <div className="mt-6">
-            <AdminDashboard />
-          </div>
-        )}
-      </div>
+      {isAdmin && (
+        <div className="p-6">
+          <button
+            onClick={handleAdminPanelClick}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+          >
+            {showAdminPanel ? "Close Admin Panel" : "Admin Panel"}
+          </button>
+
+          {showAdminPanel && (
+            <div className="mt-6">
+              <AdminDashboard />
+            </div>
+          )}
+        </div>
+      )}
+      {/* Admin Dashboard */}
 
       {/* User Dashboard */}
       {!showAdminPanel && (
