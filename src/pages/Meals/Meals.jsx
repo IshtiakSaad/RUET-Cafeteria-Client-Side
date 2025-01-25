@@ -11,7 +11,10 @@ const Meals = () => {
     const fetchData = async () => {
       try {
         const mealsResponse = await axios.get("http://localhost:3000/meals"); // API call
-        setMealsData(mealsResponse.data); // Set the response directly if it's an array
+        const availableMeals = mealsResponse.data.filter(
+          (meal) => meal.status === "Available"
+        ); // Filter meals with status "available"
+        setMealsData(availableMeals);
       } catch (error) {
         console.error("Error fetching meals data:", error);
       }

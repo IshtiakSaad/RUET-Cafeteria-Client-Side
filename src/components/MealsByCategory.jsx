@@ -15,21 +15,28 @@ const MealsByCategory = () => {
       try {
         setIsLoading(true); // Start loading
         const response = await fetch("http://localhost:3000/meals");
+  
         if (!response.ok) {
           throw new Error("Failed to fetch meals data");
         }
+  
         const data = await response.json();
-        setMeals(data); // Assuming the response is { meals: [...] }
-        console.log(meals);
-    } catch (err) {
-        setError(err.message);
+  
+        const availableMeals = data.filter(
+          (meal) => meal.status === "Available"
+        ); 
+        
+        setMeals(availableMeals); 
+        // console.log("Filtered Meals:", availableMeals); 
+      } catch (err) {
+        setError(err.message); 
       } finally {
-        setIsLoading(false); // End loading
+        setIsLoading(false); 
       }
     };
-
+  
     fetchMeals();
-  }, []);
+  }, []);       
 
   // Filter meals based on the selected category
   const filteredMeals = selectedCategory
@@ -58,7 +65,9 @@ const MealsByCategory = () => {
           <button
             key={category}
             className={`tab btn px-4 py-2 text-sm md:text-base ${
-              selectedCategory === category ? "tab-active btn-warning" : "btn-outline"
+              selectedCategory === category
+                ? "tab-active btn-warning"
+                : "btn-outline"
             }`}
             onClick={() =>
               setSelectedCategory(category === "All" ? null : category)

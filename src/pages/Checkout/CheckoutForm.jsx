@@ -4,6 +4,7 @@ import axios from "axios";
 import useCart from "../../hooks/useCart";
 import { toast } from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = ({ packageName, price }) => {
   const [error, setError] = useState(null);
@@ -15,6 +16,8 @@ const CheckoutForm = ({ packageName, price }) => {
   const elements = useElements();
   const [cart, refetch] = useCart();
   const totalPrice = price;
+  const navigate = useNavigate();
+
   // console.log(user.user.email, user.user.uid);
   useEffect(() => {
     axios
@@ -94,6 +97,7 @@ const CheckoutForm = ({ packageName, price }) => {
       }
       refetch();
       setProcessing(false);
+      navigate('/');
     }
   };
 

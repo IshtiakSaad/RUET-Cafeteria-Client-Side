@@ -8,6 +8,12 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import UpcomingMeals from "../pages/UpcomingMeals/UpcomingMeals";
 import Checkout from "../pages/Checkout/Checkout";
 import PrivateRoute from "../components/PrivateRoute";
+import AdminRoute from "../components/AdminRoute";
+import AddFood from "../pages/AddFood/AddFood";
+import AllUsers from "../pages/Dashboard/AllUsers";
+import ManageFoods from "../pages/Dashboard/ManageFoods";
+import UpdateFood from "../pages/UpdateFood/UpdateFood";
+import ManageUpcomingFoods from "../pages/Dashboard/ManageUpcomingFoods";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +55,46 @@ const router = createBrowserRouter([
           <PrivateRoute>
             <Checkout></Checkout>
           </PrivateRoute>
+        ),
+      },
+      {
+        path: "/addfood",
+        element: (
+          <AdminRoute>
+            <AddFood></AddFood>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/allusers",
+        element: (
+          <AdminRoute>
+            <AllUsers></AllUsers>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/managefoods",
+        element: (
+          <AdminRoute>
+            <ManageFoods></ManageFoods>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/updatefood/:id",
+        element: (
+          <AdminRoute>
+            <UpdateFood></UpdateFood>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/manage-upcoming-foods",
+        element: (
+          <AdminRoute>
+            <ManageUpcomingFoods></ManageUpcomingFoods>
+          </AdminRoute>
         ),
       },
     ],

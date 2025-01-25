@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext/AuthContext";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const MealDetailPage = () => {
   const { id } = useParams();
@@ -15,6 +16,8 @@ const MealDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const BASE_URL = "http://localhost:3000";
   const navigate = useNavigate();
+  const [currentMeal, setCurrentMeal] = useState('');
+  const axiosSecure = useAxiosSecure();
 
   // Fetch meal details
   useEffect(() => {
@@ -23,6 +26,7 @@ const MealDetailPage = () => {
         setLoading(true);
         const response = await axios.get(`${BASE_URL}/meals/${id}`);
         setMeal(response.data);
+        setCurrentMeal(response.data.status);
         setLikeCount(response.data.likes);
         setReviews(response.data.reviews || []);
       } catch (err) {
@@ -43,20 +47,23 @@ const MealDetailPage = () => {
     }
 
     try {
-      // Make API call to update like count on the server
       const response = await axios.post(`${BASE_URL}/meals/${id}/like`, {
-        userId: user.uid, // Send user ID to track who liked the meal (optional)
+        userId: user.uid,
       });
 
-    //   console.log(response.data.likes);
-
       if (response.status === 200) {
-        // Update like count on the client
         setLikeCount(response.data.likes);
+      }
+
+      // If likes reach 10, set status to Available (publish)
+      if (response.data.likes >= 10 && currentMeal !== "Available") {
+        console.log(currentMeal);
+        setCurrentMeal("Available");
+        await axiosSecure.put(`/update-meals/${id}`, { status: "Available" });
       }
     } catch (err) {
       console.error("Error liking the meal:", err.message);
-      alert("Failed to like the meal. Please try again later.");
+    //   alert("Failed to like the meal. Please try again later.");
     }
   };
 
@@ -94,27 +101,16 @@ const MealDetailPage = () => {
 
     try {
       const response = await axios.post(`${BASE_URL}/meals/${id}`, {
-        userId: user.uid, // Assuming `user` is from context
+        userId: user.uid,
         content: newReview,
         rating,
       });
-      //   console.log(response);
       if (response.status === 200) {
-        try {
-          setLoading(true);
-          const response = await axios.get(`${BASE_URL}/meals/${id}`);
-          setReviews(response.data.reviews);
-        } catch (err) {
-          console.error("Error fetching meal reviews:", err.message);
-          setError("Failed to load meal reviews. Please try again later.");
-        } finally {
-          setLoading(false);
-        }
-
-        // console.log(reviews);
-
-        setNewReview(""); // Clear input
-        setRating(0); // Reset rating
+        setLoading(true);
+        const response = await axios.get(`${BASE_URL}/meals/${id}`);
+        setReviews(response.data.reviews);
+        setNewReview("");
+        setRating(0);
       }
     } catch (err) {
       console.error("Error posting review:", err.message);
@@ -156,14 +152,19 @@ const MealDetailPage = () => {
             Price: ${meal?.price || "N/A"}
           </p>
           <button onClick={handleLike} className="btn btn-primary mr-4">
-            {likeCount>0? `${likeCount} Like`: "Like (0)"}
+            {likeCount > 0 ? `${likeCount} Like` : "Like (0)"}
           </button>
-          <button onClick={handleRequestMeal} className="btn btn-secondary">
-            Request Meal
-          </button>
+
+          {/* Show the "Request Meal" button if likes >= 10 */}
+          {currentMeal === "Available" && (
+            <button onClick={handleRequestMeal} className="btn btn-secondary">
+              Request Meal
+            </button>
+          )}
         </div>
       </div>
 
+      {/* Review Section */}
       <div className="mt-10">
         <h2 className="text-2xl font-bold mb-4">
           Reviews ({Array.isArray(reviews) ? reviews.length : 0})
