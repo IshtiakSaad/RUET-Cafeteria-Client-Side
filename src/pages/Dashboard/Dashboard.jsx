@@ -4,15 +4,19 @@ import AuthContext from "../../context/AuthContext/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
 
 const Dashboard = () => {
-  const { user } = useContext(AuthContext); // Get the logged-in user
+  //   const { user } = useContext(AuthContext); // Get the logged-in user
+  const user = useAuth();
   const [requestedMeals, setRequestedMeals] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [badge, setBadge] = useState("");
   const [allMeals, setAllMeals] = useState([]);
   //   const [paymentHistory, setPaymentHistory] = useState([]);
   const BASE_URL = "http://localhost:3000";
   const navigate = useNavigate();
+  //   console.log("User:", user);
 
   // Fetch data for the user dashboard
   useEffect(() => {
@@ -21,15 +25,37 @@ const Dashboard = () => {
     if (user) {
       const fetchData = async () => {
         try {
-          const mealsResponse = await axios.get(
-            `${BASE_URL}/users/${user.uid}/favorites`
-          );
+          // Fetch all meals
           const resMeals = (await axios.get(`${BASE_URL}/meals`)).data;
-
           if (isMounted) {
             setAllMeals(resMeals);
-            setRequestedMeals(mealsResponse.data);
-            // console.log("Fetched Meals:", resMeals);
+          }
+
+          // Fetch user favorites
+          try {
+            const mealsResponse = await axios.get(
+              `${BASE_URL}/users/${user.user.uid}/favorites`
+            );
+
+            if (isMounted) {
+              setRequestedMeals(mealsResponse.data || []); // Default to an empty array if no data
+            }
+          } catch (favoritesError) {
+            console.warn(
+              "No favorites found or endpoint not initialized:",
+              favoritesError.message
+            );
+            if (isMounted) {
+              setRequestedMeals([]); // Set to an empty array if the endpoint is missing
+            }
+          }
+
+          // Fetch user badge
+          const fetchedBadge = (
+            await axios.get(`${BASE_URL}/users/${user.user.uid}`)
+          ).data;
+          if (isMounted) {
+            setBadge(fetchedBadge.badge);
           }
         } catch (error) {
           console.error("Error fetching dashboard data:", error);
@@ -40,9 +66,9 @@ const Dashboard = () => {
     }
 
     return () => {
-      isMounted = false;
+      isMounted = false; // Clean up to prevent state updates on unmounted components
     };
-  }, [user]);
+  }, [user, BASE_URL]);
 
   useEffect(() => {
     const extractedReviews = [];
@@ -50,7 +76,7 @@ const Dashboard = () => {
     allMeals.map((meal) => {
       if (meal.reviews) {
         meal.reviews.map((review) => {
-          if (user.uid === review.userId) {
+          if (user.user.uid === review.userId) {
             // Push the relevant data into the temporary array
             extractedReviews.push({
               mealId: meal._id,
@@ -60,7 +86,7 @@ const Dashboard = () => {
               postedAt: review.postedAt,
             });
           }
-          console.log(extractedReviews);
+          //   console.log(extractedReviews);
         });
       }
     });
@@ -75,7 +101,7 @@ const Dashboard = () => {
   const handleCancelRequest = async (mealId) => {
     try {
       const response = await fetch(
-        `${BASE_URL}/users/${user.uid}/favorites/${mealId}`,
+        `${BASE_URL}/users/${user.user.uid}/favorites/${mealId}`,
         {
           method: "DELETE",
         }
@@ -106,14 +132,14 @@ const Dashboard = () => {
   //   Handle Payment History
   const axiosSecure = useAxiosSecure();
   const { data: payments = [] } = useQuery({
-    queryKey: ["payments", user.email],
+    queryKey: ["payments", user.user.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/payments/${user.email}`);
+      const res = await axiosSecure.get(`/payments/${user.user.email}`);
       return res.data;
     },
   });
 
-  console.log(payments);
+  //   console.log(payments);
 
   const handleDeleteReview = async (reviewId) => {
     try {
@@ -135,16 +161,16 @@ const Dashboard = () => {
         {user && (
           <div className="flex items-center space-x-4">
             <img
-              src={user.photoURL || "https://via.placeholder.com/100"}
+              src={user.user.photoURL || "https://via.placeholder.com/100"}
               alt="Profile"
               className="w-20 h-20 rounded-full border"
             />
             <div>
               <p className="text-lg font-medium">
-                {user.displayName || "Anonymous"}
+                {user.user.displayName || "Anonymous"}
               </p>
-              <p className="text-gray-600">{user.email}</p>
-              <p className="text-gray-600">Badge: {user.badge || "Bronze"}</p>
+              <p className="text-gray-600">{user.user.email}</p>
+              <p className="text-gray-600">Badge: {badge}</p>
             </div>
           </div>
         )}

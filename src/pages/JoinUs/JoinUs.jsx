@@ -1,31 +1,78 @@
-import { useContext, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth } from '../../firebase/firebase.config';
-import AuthContext from '../../context/AuthContext/AuthContext';
+import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../../firebase/firebase.config";
+import AuthContext from "../../context/AuthContext/AuthContext";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const JoinUs = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
   const { user, loading } = useContext(AuthContext); // Access user state from AuthContext
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    console.log(data);
     try {
       if (isLogin) {
         // Login
         await signInWithEmailAndPassword(auth, data.email, data.password);
-        alert('Login Successful!');
+        toast.success("Login Successful!");
       } else {
         // Register
-        const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+        // Step 1: Create user with email and password
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          data.email,
+          data.password
+        );
+
         const user = userCredential.user;
 
-        // User details are automatically synced with your database via AuthProvider
-        alert('Registration Successful!');
-        reset();
+        // Step 2: Update the user's profile with name and photoURL
+        await updateProfile(user, {
+          displayName: data.name,
+          photoURL: data.photoURL || "",
+        });
+
+        console.log("User after updateProfile:", user);
+
+        // Step 3: Save user data to MongoDB (if applicable)
+        await fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            uid: user.uid,
+            email: user.email,
+            displayName: data.name, // Use displayName to match the backend
+            photoURL: data.photoURL,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => console.log("Response from server:", data))
+          .catch((error) => console.error("Error posting user:", error));
+
+        toast.success("Registration Successful!");
       }
+
+      reset();
+      navigate("/");
     } catch (error) {
-      console.error(error.message);
+      console.error("Error during registration:", error.message);
       alert(error.message);
     }
   };
@@ -35,8 +82,10 @@ const JoinUs = () => {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
 
+      toast.success("Welcome!");
+      navigate("/");
       // User details are automatically synced with your database via AuthProvider
-      alert('Social Login Successful!');
+    //   alert("Social Login Successful!");
     } catch (error) {
       console.error(error.message);
       alert(error.message);
@@ -47,78 +96,99 @@ const JoinUs = () => {
     return <div className="text-center py-20">Loading...</div>;
   }
 
-  if (user) {
-    return (
-      <div className="flex items-center justify-center py-10 bg-gray-100">
-        <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
-          <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
-            Welcome, {user.displayName || 'User'}!
-          </h1>
-          <p className="text-center text-gray-600 mb-4">
-            You are already logged in.
-          </p>
-          <button
-            onClick={() => alert('Already logged in!')}
-            className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Continue to Dashboard
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex items-center justify-center py-10 bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
         <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
-          {isLogin ? 'Login' : 'Register'}
+          {isLogin ? "Login" : "Register"}
         </h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {!isLogin && (
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Name
-              </label>
-              <input
-                type="text"
-                {...register('name', { required: 'Name is required' })}
-                placeholder="Your Name"
-                className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              />
-              {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
-            </div>
+            <>
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  {...register("name", { required: "Name is required" })}
+                  placeholder="Your Name"
+                  className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                {errors.name && (
+                  <p className="text-sm text-red-500">{errors.name.message}</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="photoURL"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Photo URL
+                </label>
+                <input
+                  type="text"
+                  {...register("photoURL")}
+                  placeholder="Profile Photo URL"
+                  className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                {errors.photoURL && (
+                  <p className="text-sm text-red-500">
+                    {errors.photoURL.message}
+                  </p>
+                )}
+              </div>
+            </>
           )}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email
             </label>
             <input
               type="email"
-              {...register('email', { required: 'Email is required' })}
+              {...register("email", { required: "Email is required" })}
               placeholder="Your Email"
               className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
-            {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )}
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
               type="password"
-              {...register('password', { required: 'Password is required', minLength: { value: 6, message: 'Password must be at least 6 characters' } })}
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+              })}
               placeholder="Your Password"
               className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
-            {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
+            )}
           </div>
           <button
             type="submit"
             className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            {isLogin ? 'Login' : 'Register'}
+            {isLogin ? "Login" : "Register"}
           </button>
         </form>
 
@@ -133,12 +203,12 @@ const JoinUs = () => {
         </div>
 
         <p className="mt-4 text-center text-sm text-gray-600">
-          {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
+          {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
           <button
             onClick={() => setIsLogin(!isLogin)}
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
-            {isLogin ? 'Register' : 'Login'}
+            {isLogin ? "Register" : "Login"}
           </button>
         </p>
       </div>
