@@ -108,6 +108,7 @@ const AllUsers = () => {
               <th className="px-6 py-3 border-b border-gray-300">#</th>
               <th className="px-6 py-3 border-b border-gray-300">Name</th>
               <th className="px-6 py-3 border-b border-gray-300">Email</th>
+              <th className="px-6 py-3 border-b border-gray-300">Subscription</th>
               <th className="px-6 py-3 border-b border-gray-300">Role</th>
               <th className="px-6 py-3 border-b border-gray-300">Actions</th>
             </tr>
@@ -128,6 +129,9 @@ const AllUsers = () => {
                 </td>
                 <td className="px-6 py-4 border-b border-gray-300">
                   {user.email}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-300">
+                  {user.badge}
                 </td>
                 <td className="px-6 py-4 border-b border-gray-300">
                   {user.role === "admin" ? (

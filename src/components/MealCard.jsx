@@ -2,7 +2,7 @@ const MealCard = ({ meal, onDetailsClick }) => {
     const { title, image, rating, price, id } = meal;
   
     return (
-      <div className="max-w-sm w-full mx-auto bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+      <div className="max-w-sm w-full mx-auto bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-2xl">
         <img
           src={image}
           alt={title}
