@@ -6,7 +6,7 @@ const Navbar = () => {
   const { user, logoutUser } = useContext(AuthContext);
 
   return (
-    <div className="lg:px-44 mb-4 bg-white shadow-md border-b border-gray-200">
+    <div className="lg:px-44 bg-white shadow-md border-b border-gray-200">
       <div className="navbar">
         {/* Navbar Start */}
         <div className="navbar-start">

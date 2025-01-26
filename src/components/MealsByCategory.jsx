@@ -14,7 +14,7 @@ const MealsByCategory = () => {
     const fetchMeals = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("http://localhost:3000/meals");
+        const response = await fetch("http://localhost:3000/mealsbycategory");
 
         if (!response.ok) {
           throw new Error("Failed to fetch meals data");

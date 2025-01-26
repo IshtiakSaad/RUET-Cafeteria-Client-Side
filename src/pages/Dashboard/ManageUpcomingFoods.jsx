@@ -24,7 +24,7 @@ const ManageUpcomingMeals = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        const response = await axiosSecure.get("/meals");
+        const response = await axiosSecure.get("/mealsbycategory");
         const filteredMeals = response.data
           .filter((meal) => meal.status === "Upcoming")
           .sort((a, b) => b.likes - a.likes); // Sort by likes descending
