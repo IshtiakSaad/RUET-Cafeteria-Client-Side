@@ -17,7 +17,9 @@ const ManageFoods = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:3000/meals${sortOption ? `?sortBy=${sortOption}` : ""}`
+        `http://localhost:3000/meals${
+          sortOption ? `?sortBy=${sortOption}` : ""
+        }`
       );
       setMeals(response.data);
     } catch (error) {
@@ -113,6 +115,7 @@ const ManageFoods = () => {
                 <th className="px-6 py-3 text-gray-300">Reviews</th>
                 <th className="px-6 py-3 text-gray-300">Rating</th>
                 <th className="px-6 py-3 text-gray-300">Distributor</th>
+                <th className="px-6 py-3 text-gray-300 text-center">Status</th>
                 <th className="px-6 py-3 text-gray-300">Actions</th>
               </tr>
             </thead>
@@ -128,7 +131,13 @@ const ManageFoods = () => {
                   <td className="px-6 py-3">{meal.likes || 0}</td>
                   <td className="px-6 py-3">{meal.reviews.length || 0}</td>
                   <td className="px-6 py-3">{meal.rating.toFixed(1)}</td>
-                  <td className="px-6 py-3">{meal.distributorName || meal.distributor}</td>
+                  <td className="px-6 py-3">
+                    {meal.distributorName || meal.distributor}
+                  </td>
+                  <td className="px-6 py-3 text-center">
+                    <span className="border-1 border solid px-4 py-1 rounded-lg">{meal.status}</span>
+                  </td>
+
                   <td className="px-6 py-3 flex gap-2">
                     <button
                       onClick={() => navigate(`/meals/${meal._id}`)}

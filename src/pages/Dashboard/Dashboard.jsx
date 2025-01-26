@@ -24,15 +24,16 @@ const Dashboard = () => {
           const resMeals = (await axios.get(`${BASE_URL}/meals`)).data;
           if (isMounted) setAllMeals(resMeals);
 
+          const fetchedBadge = (
+            await axios.get(`${BASE_URL}/users/${user.user.uid}`)
+          ).data;
+          if (isMounted) setBadge(fetchedBadge.badge);
+
           const mealsResponse = await axios.get(
             `${BASE_URL}/users/${user.user.uid}/favorites`
           );
           if (isMounted) setRequestedMeals(mealsResponse.data || []);
 
-          const fetchedBadge = (
-            await axios.get(`${BASE_URL}/users/${user.user.uid}`)
-          ).data;
-          if (isMounted) setBadge(fetchedBadge.badge);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -86,7 +87,7 @@ const Dashboard = () => {
     },
   });
 
-  console.log(reviews);
+//   console.log(reviews);
 
   const handleDeleteReview = async (mealId, reviewId) => {
     try {

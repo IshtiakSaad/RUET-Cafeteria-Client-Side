@@ -2,11 +2,13 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext/AuthContext";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
 
 const MealDetailPage = () => {
   const { id } = useParams();
-  const { user } = useContext(AuthContext);
+  const {user} = useAuth();
   const [meal, setMeal] = useState(null);
   const [likeCount, setLikeCount] = useState(0);
   const [reviews, setReviews] = useState([]);
@@ -18,17 +20,30 @@ const MealDetailPage = () => {
   const navigate = useNavigate();
   const [currentMeal, setCurrentMeal] = useState("");
   const axiosSecure = useAxiosSecure();
+  const [userBadge, setUserBadge] = useState('');
+  const [liked, setLiked] = useState(false);
 
   // Fetch meal details
   useEffect(() => {
     const fetchMealDetails = async () => {
       try {
         setLoading(true);
+  
+        const res = await axiosSecure.get(`/users/${user.uid}`);
+        setUserBadge(res.data.badge);
+  
         const response = await axios.get(`${BASE_URL}/meals/${id}`);
         setMeal(response.data);
         setCurrentMeal(response.data.status);
         setLikeCount(response.data.likes);
         setReviews(response.data.reviews || []);
+        
+        // Check if likedBy exists and if the user has liked this meal
+        if (response.data.likedBy && response.data.likedBy.includes(user.uid)) {
+          setLiked(true);  // User has already liked the meal
+        } else {
+          setLiked(false); // User has not liked the meal
+        }
       } catch (err) {
         console.error("Error fetching meal details:", err.message);
         setError("Failed to load meal details. Please try again later.");
@@ -37,13 +52,34 @@ const MealDetailPage = () => {
       }
     };
     fetchMealDetails();
-  }, [id]);
+  }, [id, user.uid]);  // Also depend on user.uid to handle changes in the logged-in user
+  
 
   // Handle liking a meal
   const handleLike = async () => {
     if (!user) {
-      alert("You must be logged in to like this meal.");
+        toast.error("You must be logged in to like this meal.");
       return;
+    }
+    
+    // console.log(meal);
+    // console.log(user);
+    // console.log(liked);
+
+    if(liked===true){
+        return;
+    }
+    else{
+        setLiked(true);
+        // // console.log(user.uid, liked)
+        const res = await axios.post("http://localhost:3000/liked", { userId: user.uid, mealId: meal._id});
+        console.log(res);
+    }
+
+
+    if( (userBadge==='Bronze' || userBadge==='bronze') && (meal.status==='Upcoming')){
+        toast.error("You must be Gold/Silver/Platinum User to like this meal.");
+        return;
     }
 
     try {
@@ -68,7 +104,7 @@ const MealDetailPage = () => {
   // Handle requesting a meal
   const handleRequestMeal = async () => {
     if (!user) {
-      alert("You must be logged in to request a meal.");
+        toast.error("You must be logged in to request a meal.");
       return;
     }
     const requestDetails = {
@@ -93,6 +129,11 @@ const MealDetailPage = () => {
 
   // Handle posting a review
   const handlePostReview = async () => {
+    if (!user) {
+        toast.error("You must be logged in to post review");
+      return;
+    }
+
     if (!newReview || !rating) {
       alert("Please add both review content and rating.");
       return;

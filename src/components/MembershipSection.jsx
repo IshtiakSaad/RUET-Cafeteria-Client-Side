@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext/AuthContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const MembershipSection = () => {
   const { user } = useContext(AuthContext);
@@ -29,6 +30,11 @@ const MembershipSection = () => {
   ];
 
   const handleSubscribe = (plan) => {
+    if (!user) {
+        toast.error(`You must be logged in Subscribe to ${plan.name} plan.`);
+      return;
+    }
+
     const cartItem = {
       uid: user.uid,
       email: user.email,

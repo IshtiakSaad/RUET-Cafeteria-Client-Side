@@ -92,7 +92,7 @@ const AddFood = () => {
         </p>
         <button
           onClick={() => navigate("/admin-dashboard")}
-          className="px-8 py-1 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white rounded-lg text-lg shadow-lg hover:opacity-90 transition duration-300"
+          className="px-8 py-1 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-black font-medium rounded-lg text-lg shadow-lg hover:opacity-90 transition duration-300"
         >
           Admin Panel
         </button>
@@ -111,7 +111,7 @@ const AddFood = () => {
               type="text"
               {...register("title", { required: "Title is required" })}
               placeholder="Enter food title"
-              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-black font-medium placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {errors.title && (
               <p className="text-red-400 text-sm mt-1">
@@ -129,7 +129,7 @@ const AddFood = () => {
               type="text"
               {...register("category", { required: "Category is required" })}
               placeholder="e.g., Breakfast"
-              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-black font-medium placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {errors.category && (
               <p className="text-red-400 text-sm mt-1">
@@ -146,10 +146,13 @@ const AddFood = () => {
             <input
               type="number"
               step="0.1"
+              min="0"
+              max="5"
               {...register("rating", { required: "Rating is required" })}
               placeholder="Enter food rating (e.g., 4.5)"
-              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-black font-medium placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
+
             {errors.rating && (
               <p className="text-red-400 text-sm mt-1">
                 {errors.rating.message}
@@ -167,7 +170,7 @@ const AddFood = () => {
               step="0.01"
               {...register("price", { required: "Price is required" })}
               placeholder="Enter food price"
-              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-black font-medium placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {errors.price && (
               <p className="text-red-400 text-sm mt-1">
@@ -185,7 +188,7 @@ const AddFood = () => {
               type="file"
               accept="image/*"
               onChange={(e) => setImageFile(e.target.files[0])}
-              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-black font-medium placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {imageError && (
               <p className="text-red-400 text-sm mt-1">{imageError}</p>
@@ -202,7 +205,7 @@ const AddFood = () => {
                 required: "Description is required",
               })}
               placeholder="Enter food description"
-              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-black font-medium placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
               rows="3"
             ></textarea>
             {errors.description && (
@@ -223,7 +226,7 @@ const AddFood = () => {
                 required: "Ingredients are required",
               })}
               placeholder="Enter ingredients, separated by commas"
-              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-black font-medium placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {errors.ingredients && (
               <p className="text-red-400 text-sm mt-1">
@@ -235,7 +238,7 @@ const AddFood = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-lg shadow-lg hover:scale-105 transition-transform"
+            className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-black font-medium font-bold rounded-lg shadow-lg hover:scale-105 transition-transform"
           >
             Add Food
           </button>

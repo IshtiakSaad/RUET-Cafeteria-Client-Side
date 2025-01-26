@@ -18,12 +18,13 @@ import ManageFoodReviews from "../pages/Dashboard/ManageFoodReviews";
 import AdminDashboard from "../pages/Dashboard/AdminDashboard";
 import RequestedMeals from "../pages/Dashboard/RequestedMeals";
 import EditReviewPage from "../pages/Dashboard/EditReviewPage";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
-    errorElement: <h1>Error 404: Page Not Found</h1>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
@@ -64,70 +65,90 @@ const router = createBrowserRouter([
       {
         path: "/addfood",
         element: (
-          <AdminRoute>
-            <AddFood></AddFood>
-          </AdminRoute>
+          <PrivateRoute>
+            <AdminRoute>
+              <AddFood></AddFood>
+            </AdminRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/allusers",
         element: (
-          <AdminRoute>
-            <AllUsers></AllUsers>
-          </AdminRoute>
+          <PrivateRoute>
+            <AdminRoute>
+              <AllUsers></AllUsers>
+            </AdminRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/managefoods",
         element: (
-          <AdminRoute>
-            <ManageFoods></ManageFoods>
-          </AdminRoute>
+          <PrivateRoute>
+            <AdminRoute>
+              <ManageFoods></ManageFoods>
+            </AdminRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/updatefood/:id",
         element: (
-          <AdminRoute>
-            <UpdateFood></UpdateFood>
-          </AdminRoute>
+          <PrivateRoute>
+            <AdminRoute>
+              <UpdateFood></UpdateFood>
+            </AdminRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/manage-upcoming-foods",
         element: (
-          <AdminRoute>
-            <ManageUpcomingFoods></ManageUpcomingFoods>
-          </AdminRoute>
+          <PrivateRoute>
+            <AdminRoute>
+              <ManageUpcomingFoods></ManageUpcomingFoods>
+            </AdminRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/manage-food-reviews",
         element: (
-          <AdminRoute>
-            <ManageFoodReviews></ManageFoodReviews>
-          </AdminRoute>
+          <PrivateRoute>
+            <AdminRoute>
+              <ManageFoodReviews></ManageFoodReviews>
+            </AdminRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/admin-dashboard",
         element: (
-          <AdminRoute>
-            <AdminDashboard></AdminDashboard>
-          </AdminRoute>
+          <PrivateRoute>
+            <AdminRoute>
+              <AdminDashboard></AdminDashboard>
+            </AdminRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/serve-meals",
         element: (
-          <AdminRoute>
-            <RequestedMeals></RequestedMeals>
-          </AdminRoute>
+          <PrivateRoute>
+            <AdminRoute>
+              <RequestedMeals></RequestedMeals>
+            </AdminRoute>
+          </PrivateRoute>
         ),
       },
       {
         path: "/edit-review/:reviewId",
-        element: <EditReviewPage></EditReviewPage>,
+        element: (
+          <PrivateRoute>
+              <EditReviewPage></EditReviewPage>
+          </PrivateRoute>
+        ),
       },
     ],
   },
