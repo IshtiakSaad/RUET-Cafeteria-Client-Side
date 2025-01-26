@@ -15,6 +15,8 @@ import ManageFoods from "../pages/Dashboard/ManageFoods";
 import UpdateFood from "../pages/UpdateFood/UpdateFood";
 import ManageUpcomingFoods from "../pages/Dashboard/ManageUpcomingFoods";
 import ManageFoodReviews from "../pages/Dashboard/ManageFoodReviews";
+import AdminDashboard from "../pages/Dashboard/AdminDashboard";
+import RequestedMeals from "../pages/Dashboard/RequestedMeals";
 
 const router = createBrowserRouter([
   {
@@ -106,6 +108,22 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      {
+        path: '/admin-dashboard',
+        element: (
+            <AdminRoute>
+                <AdminDashboard></AdminDashboard>
+            </AdminRoute>
+        )
+      },
+      {
+        path: '/serve-meals',
+        element: (
+            <AdminRoute>
+                <RequestedMeals></RequestedMeals>
+            </AdminRoute>
+        )
+      }
     ],
   },
 ]);

@@ -73,6 +73,7 @@ const MealDetailPage = () => {
     }
     const requestDetails = {
       ...meal,
+      status: 'requested',
       requestedBy: user.uid,
     };
 

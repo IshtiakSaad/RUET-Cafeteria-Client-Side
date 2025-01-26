@@ -63,6 +63,17 @@ const ManageFoodReviews = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 px-4 py-8">
       <div className="p-6">
+      <div className="mb-8 text-center p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
+        <p className="text-2xl font-semibold text-black mb-4">
+          Back to Admin Dashboard?
+        </p>
+        <button
+          onClick={() => navigate("/admin-dashboard")}
+          className="px-8 py-1 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white rounded-lg text-lg shadow-lg hover:opacity-90 transition duration-300"
+        >
+          Admin Panel
+        </button>
+      </div>
         <h2 className="text-2xl font-bold text-white mb-6">All Reviews</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-gray-200">

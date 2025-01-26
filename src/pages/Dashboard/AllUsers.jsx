@@ -4,10 +4,12 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { FaTrashAlt } from "react-icons/fa";
 import { GrUserAdmin } from "react-icons/gr";
+import { useNavigate } from "react-router-dom";
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
   const [search, setSearch] = useState(""); // Search state
+  const navigate = useNavigate();
 
   // Fetch users with search parameter
   const { data: users = [], refetch } = useQuery({
@@ -64,12 +66,24 @@ const AllUsers = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 p-2 lg:p-8">
+      <div className="mb-8 text-center p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
+        <p className="text-2xl font-semibold text-black mb-4">
+          Back to Admin Dashboard?
+        </p>
+        <button
+          onClick={() => navigate("/admin-dashboard")}
+          className="px-8 py-1 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white rounded-lg text-lg shadow-lg hover:opacity-90 transition duration-300"
+        >
+          Admin Panel
+        </button>
+      </div>
       {/* Search Bar and Total Users */}
       <div className="flex flex-col sm:flex-row sm:justify-between items-center mb-8">
         <h2 className="text-4xl font-bold text-gray-800 mb-4 sm:mb-0">
           All Users
         </h2>
+
         <div className="flex items-center w-full sm:w-auto">
           <input
             type="text"
