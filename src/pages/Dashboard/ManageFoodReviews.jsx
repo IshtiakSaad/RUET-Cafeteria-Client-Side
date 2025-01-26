@@ -61,7 +61,7 @@ const ManageFoodReviews = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 lg:px-4 py-8">
       <div className="p-6">
       <div className="mb-8 text-center p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
         <p className="text-2xl font-semibold text-black mb-4">
@@ -75,8 +75,8 @@ const ManageFoodReviews = () => {
         </button>
       </div>
         <h2 className="text-2xl font-bold text-white mb-6">All Reviews</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-gray-200">
+        <div className="overflow-x-auto rounded-lg shadow-md">
+          <table className="w-full border-collapse text-left text-gray-200">
             <thead>
               <tr className="bg-purple-600 text-white">
                 <th className="px-4 py-2">Meal Title</th>
@@ -99,7 +99,7 @@ const ManageFoodReviews = () => {
                     {meal.reviews.map((review, index) => (
                       <div
                         key={review._id}
-                        className="mb-2 flex justify-between items-center"
+                        className="mb-2 flex justify-between gap-4 items-center"
                       >
                         <p className="mb-1">
                           {index + 1}. {review.content}

@@ -34,21 +34,19 @@ const Checkout = () => {
 
   if (!packageDetails) {
     return (
-      <div className="flex justify-center items-center">
-        <p className="text-lg font-semibold text-gray-600 animate-pulse">
-          Loading package details...
-        </p>
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-100 via-white to-blue-200">
+        <p className="text-lg font-semibold text-gray-600 animate-pulse">Loading package details...</p>
       </div>
     );
   }
 
   return (
-    <div className=" bg-gray-50 flex justify-center items-center py-32">
-      <div className="w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">
-        <h2 className="text-2xl font-bold text-indigo-600 mb-4 text-center">
+    <div className="bg-gradient-to-tl from-blue-50 via-white to-indigo-100 py-32 py-20">
+      <div className="w-full max-w-md p-8 bg-white shadow-xl rounded-2xl mx-auto">
+        <h2 className="text-3xl font-extrabold text-indigo-600 mb-4 text-center">
           Checkout for {packageName} Plan
         </h2>
-        <p className="text-lg text-gray-700 mb-2 text-center">
+        <p className="text-lg text-gray-700 mb-4 text-center">
           {packageDetails.description}
         </p>
         <p className="text-xl font-semibold text-gray-800 mb-6 text-center">

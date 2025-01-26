@@ -13,30 +13,25 @@ const MealsByCategory = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        setIsLoading(true); // Start loading
+        setIsLoading(true);
         const response = await fetch("http://localhost:3000/meals");
-  
+
         if (!response.ok) {
           throw new Error("Failed to fetch meals data");
         }
-  
+
         const data = await response.json();
-  
-        const availableMeals = data.filter(
-          (meal) => meal.status === "Available"
-        ); 
-        
-        setMeals(availableMeals); 
-        // console.log("Filtered Meals:", availableMeals); 
+        const availableMeals = data.filter((meal) => meal.status === "Available");
+        setMeals(availableMeals);
       } catch (err) {
-        setError(err.message); 
+        setError(err.message);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     };
-  
+
     fetchMeals();
-  }, []);       
+  }, []);
 
   // Filter meals based on the selected category
   const filteredMeals = selectedCategory
@@ -45,29 +40,33 @@ const MealsByCategory = () => {
 
   // Handle meal details navigation
   const handleDetails = (id) => {
-    navigate(`/meals/${id}`); // Navigate to the meal details route
+    navigate(`/meals/${id}`);
   };
 
   if (isLoading) {
-    return <p className="text-center">Loading meals...</p>;
+    return <p className="text-center text-gray-600 text-lg">Loading meals...</p>;
   }
 
   if (error) {
-    console.log(error);
-    return <p className="text-center text-red-500">Error: {error}</p>;
+    console.error(error);
+    return (
+      <p className="text-center text-red-500 font-semibold">
+        Error: {error}
+      </p>
+    );
   }
 
   return (
-    <div className="w-11/12 lg:w-3/4 mx-auto my-10">
+    <div className="w-11/12 lg:w-3/4 mx-auto my-12">
       {/* Tabs */}
-      <div className="flex flex-wrap justify-center gap-4 mb-8">
+      <div className="flex flex-wrap justify-center gap-4 lg:gap-6 mb-8">
         {["Breakfast", "Lunch", "Dinner", "All"].map((category) => (
           <button
             key={category}
-            className={`tab btn px-4 py-2 text-sm md:text-base ${
+            className={`px-5 py-2 text-sm md:text-base rounded-full font-medium transition-all duration-300 shadow-md ${
               selectedCategory === category
-                ? "tab-active btn-warning"
-                : "btn-outline"
+                ? "bg-gray-800 text-white hover:bg-gray-700"
+                : "bg-gray-200 text-gray-600 hover:bg-gray-300"
             }`}
             onClick={() =>
               setSelectedCategory(category === "All" ? null : category)
@@ -82,7 +81,9 @@ const MealsByCategory = () => {
       {filteredMeals.length > 0 ? (
         <MealsList meals={filteredMeals} onMealDetails={handleDetails} />
       ) : (
-        <p className="text-center">No meals found for this category.</p>
+        <p className="text-center text-gray-600 text-lg">
+          No meals found for this category.
+        </p>
       )}
     </div>
   );

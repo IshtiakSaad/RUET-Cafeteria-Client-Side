@@ -1,15 +1,19 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const RequestedMeals = () => {
   const axiosSecure = useAxiosSecure();
+  const [search, setSearch] = useState(""); // Search state
+  const navigate = useNavigate();
 
   // Fetch users
   const { data: users = [], refetch } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", search],
     queryFn: async () => {
       const res = await axiosSecure.get("/users", {
+        params: { search },
         headers: {
           authorization: `Bearer: ${localStorage.getItem("access-token")}`,
         },
@@ -49,7 +53,7 @@ const RequestedMeals = () => {
         meal.mealId === mealId ? { ...meal, status: "delivered" } : meal
       );
 
-    //   setRequestedMeals(updatedMeals);
+      //   setRequestedMeals(updatedMeals);
 
       console.log("Meal status updated successfully.");
     } catch (error) {
@@ -59,9 +63,40 @@ const RequestedMeals = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen flex flex-col items-center">
-      <h2 className="text-3xl font-semibold text-gray-800 mb-6">
-        Requested Meals
-      </h2>
+      
+      <div className="mb-8 text-center p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
+        <p className="text-2xl font-semibold text-black mb-4">
+          Back to Admin Dashboard?
+        </p>
+        <button
+          onClick={() => navigate("/admin-dashboard")}
+          className="px-8 py-1 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white rounded-lg text-lg shadow-lg hover:opacity-90 transition duration-300"
+        >
+          Admin Panel
+        </button>
+      </div>
+      
+      {/* Search Bar and Total Meals */}
+      <div className="flex flex-col justify-between w-full max-w-5xl sm:flex-row sm:justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">
+          All Requested Meals
+        </h2>
+
+        <div className="flex items-center w-full sm:w-auto">
+          <input
+            type="text"
+            placeholder="Search by username or email..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="input input-bordered w-full sm:w-80 mr-4"
+          />
+          <h2 className="hidden lg:block text-2xl font-medium text-gray-600">
+            Total Meals: <span className="font-semibold">{requestedMeals.length}</span>
+          </h2>
+        </div>
+      </div>
+
+
       {requestedMeals.length > 0 ? (
         <div className="overflow-x-auto w-full max-w-5xl">
           <table className="w-full text-left border-collapse border border-gray-300 shadow-lg rounded-lg">
@@ -110,7 +145,9 @@ const RequestedMeals = () => {
                   </td>
                   <td className="px-6 py-4">
                     <button
-                      onClick={() => handleServeMeal(meal._id, meal.user.userId)}
+                      onClick={() =>
+                        handleServeMeal(meal._id, meal.user.userId)
+                      }
                       disabled={meal.status === "served"}
                       className={`px-4 py-2 rounded-lg text-sm font-medium transition focus:outline-none ${
                         meal.status === "delivered"

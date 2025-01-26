@@ -33,36 +33,35 @@ const MembershipSection = () => {
       uid: user.uid,
       email: user.email,
       price: plan.price,
-      packageName: plan.name,  // Add the package name
+      packageName: plan.name,
     };
     console.log(cartItem);
-    axios
-      .post("http://localhost:3000/cart", cartItem)
-      .then((res) => console.log(res.data));
+    axios.post("http://localhost:3000/cart", cartItem).then((res) => console.log(res.data));
 
-    navigate(`/checkout/${plan.name}`);  // Navigate with the plan name
+    navigate(`/checkout/${plan.name}`);
   };
 
   return (
-    <section className="w-11/12 lg:w-3/4 mx-auto my-10 text-center">
-      <h2 className="text-3xl md:text-4xl font-bold mb-6">Membership Plans</h2>
-      <p className="text-lg text-gray-600 mb-10">
-        Choose the best plan that fits your needs.
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="w-11/12 lg:w-3/4 mx-auto my-16 text-center">
+      <h2 className="text-4xl font-extrabold mb-4 text-gray-800">Membership Plans</h2>
+      <p className="text-lg text-gray-600 mb-10">Choose the best plan tailored to your needs.</p>
+
+      {/* Membership Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {membershipPlans.map((plan) => (
           <div
             key={plan.name}
-            className="card shadow-lg p-6 bg-white rounded-lg transform hover:scale-105 transition-transform"
+            className="relative group bg-white rounded-xl shadow-xl p-6 transition-transform transform hover:scale-105 hover:shadow-2xl"
           >
-            <h3 className="text-xl font-bold mb-4 text-indigo-600">
-              {plan.name}
-            </h3>
-            <p className="text-2xl font-semibold mb-2">${plan.price}/month</p>
-            <p className="text-gray-500 mb-6">{plan.description}</p>
+            {/* Card Border Effect */}
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-500 to-pink-500 opacity-0 group-hover:opacity-20 pointer-events-none transition-opacity"></div>
+
+            <h3 className="text-2xl font-bold mb-4 text-gray-800">{plan.name}</h3>
+            <p className="text-4xl font-extrabold text-gray-900 mb-2">${plan.price}<span className="text-lg">/month</span></p>
+            <p className="text-gray-600 mb-6">{plan.description}</p>
             <button
               onClick={() => handleSubscribe(plan)}
-              className="btn btn-primary w-full py-2 rounded-md font-semibold shadow-md"
+              className="w-full py-3 text-white bg-indigo-600 rounded-lg shadow-md font-semibold hover:bg-indigo-700 transition-colors"
             >
               Subscribe
             </button>

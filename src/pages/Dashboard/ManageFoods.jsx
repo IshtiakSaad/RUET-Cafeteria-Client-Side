@@ -17,9 +17,7 @@ const ManageFoods = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:3000/meals${
-          sortOption ? `?sortBy=${sortOption}` : ""
-        }`
+        `http://localhost:3000/meals${sortOption ? `?sortBy=${sortOption}` : ""}`
       );
       setMeals(response.data);
     } catch (error) {
@@ -42,9 +40,8 @@ const ManageFoods = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await axiosSecure.delete(`/meals/${id}`);
-        console.log(res.data);
         if (res.data.deletedCount > 0) {
-          // refetch to update the ui
+          // refetch to update the UI
           fetchMeals();
           Swal.fire({
             position: "top-end",
@@ -70,37 +67,34 @@ const ManageFoods = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-8">
-      <div className="mb-8 text-center p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
-        <p className="text-2xl font-semibold text-black mb-4">
-          Back to Admin Dashboard?
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-6 md:p-12">
+      <div className="mb-8 text-center p-6 bg-gradient-to-r from-white/10 via-white/20 to-white/10 rounded-xl shadow-md">
+        <h1 className="text-4xl font-bold mb-4">Manage Meals</h1>
         <button
           onClick={() => navigate("/admin-dashboard")}
-          className="px-8 py-1 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white rounded-lg text-lg shadow-lg hover:opacity-90 transition duration-300"
+          className="px-6 py-2 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white font-medium rounded-lg shadow-lg hover:opacity-90 transition duration-300"
         >
-          Admin Panel
+          Back to Admin Panel
         </button>
       </div>
-      <h2 className="text-3xl font-bold mb-8 text-center">Manage Meals</h2>
 
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end mb-6 gap-4">
         <button
           onClick={() => handleSort("likes")}
-          className={`px-4 py-2 rounded-lg font-bold ${
+          className={`px-4 py-2 rounded-lg font-medium shadow-md transition-all duration-300 ${
             sortBy === "likes"
-              ? "bg-purple-600"
-              : "bg-gray-700 hover:bg-purple-500"
+              ? "bg-purple-600 text-white"
+              : "bg-gray-700 text-gray-300 hover:bg-purple-500"
           }`}
         >
           Sort by Likes
         </button>
         <button
           onClick={() => handleSort("reviews")}
-          className={`ml-4 px-4 py-2 rounded-lg font-bold ${
+          className={`px-4 py-2 rounded-lg font-medium shadow-md transition-all duration-300 ${
             sortBy === "reviews"
-              ? "bg-purple-600"
-              : "bg-gray-700 hover:bg-purple-500"
+              ? "bg-purple-600 text-white"
+              : "bg-gray-700 text-gray-300 hover:bg-purple-500"
           }`}
         >
           Sort by Reviews
@@ -108,61 +102,58 @@ const ManageFoods = () => {
       </div>
 
       {loading ? (
-        <p className="text-center text-lg">Loading...</p>
+        <p className="text-center text-lg font-medium">Loading...</p>
       ) : (
-        <table className="w-full table-auto border-collapse border border-gray-700">
-          <thead>
-            <tr>
-              <th className="border border-gray-700 px-4 py-2">Title</th>
-              <th className="border border-gray-700 px-4 py-2">Likes</th>
-              <th className="border border-gray-700 px-4 py-2">Reviews</th>
-              <th className="border border-gray-700 px-4 py-2">Rating</th>
-              <th className="border border-gray-700 px-4 py-2">Distributor</th>
-              <th className="border border-gray-700 px-4 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {meals.map((meal) => (
-              <tr key={meal._id}>
-                <td className="border border-gray-700 px-4 py-2">
-                  {meal.title}
-                </td>
-                <td className="border border-gray-700 px-4 py-2">
-                  {meal.likes || 0}
-                </td>
-                <td className="border border-gray-700 px-4 py-2">
-                  {meal.reviews.length || 0}
-                </td>
-                <td className="border border-gray-700 px-4 py-2">
-                  {meal.rating.toFixed(1)}
-                </td>
-                <td className="border border-gray-700 px-4 py-2">
-                  {meal.distributorName || meal.distributor}
-                </td>
-                <td className="border border-gray-700 px-4 py-2 space-x-2">
-                  <button
-                    onClick={() => navigate(`/meals/${meal._id}`)}
-                    className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700"
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={() => navigate(`/updatefood/${meal._id}`)}
-                    className="px-4 py-2 rounded-lg bg-yellow-600 hover:bg-yellow-700"
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={() => handleDelete(meal._id)}
-                    className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-x-auto rounded-lg shadow-md">
+          <table className="w-full border-collapse text-left text-sm">
+            <thead className="bg-gray-800">
+              <tr>
+                <th className="px-6 py-3 text-gray-300">Title</th>
+                <th className="px-6 py-3 text-gray-300">Likes</th>
+                <th className="px-6 py-3 text-gray-300">Reviews</th>
+                <th className="px-6 py-3 text-gray-300">Rating</th>
+                <th className="px-6 py-3 text-gray-300">Distributor</th>
+                <th className="px-6 py-3 text-gray-300">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {meals.map((meal, index) => (
+                <tr
+                  key={meal._id}
+                  className={`${
+                    index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
+                  } hover:bg-gray-600 transition-colors duration-300`}
+                >
+                  <td className="px-6 py-3">{meal.title}</td>
+                  <td className="px-6 py-3">{meal.likes || 0}</td>
+                  <td className="px-6 py-3">{meal.reviews.length || 0}</td>
+                  <td className="px-6 py-3">{meal.rating.toFixed(1)}</td>
+                  <td className="px-6 py-3">{meal.distributorName || meal.distributor}</td>
+                  <td className="px-6 py-3 flex gap-2">
+                    <button
+                      onClick={() => navigate(`/meals/${meal._id}`)}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md"
+                    >
+                      View
+                    </button>
+                    <button
+                      onClick={() => navigate(`/updatefood/${meal._id}`)}
+                      className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded-lg shadow-md"
+                    >
+                      Update
+                    </button>
+                    <button
+                      onClick={() => handleDelete(meal._id)}
+                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

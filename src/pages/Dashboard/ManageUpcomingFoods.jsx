@@ -92,8 +92,17 @@ const ManageUpcomingMeals = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 p-8">
-      <h2 className="text-3xl font-extrabold text-white mb-6">Upcoming Meals</h2>
       
+      <div className="mb-8 text-center p-6 bg-gradient-to-r from-white/10 via-white/20 to-white/10 rounded-xl shadow-md">
+        <h1 className="text-4xl font-bold mb-4">Manage Upcoming Meals</h1>
+        <button
+          onClick={() => navigate("/admin-dashboard")}
+          className="px-6 py-2 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white font-medium rounded-lg shadow-lg hover:opacity-90 transition duration-300"
+        >
+          Back to Admin Panel
+        </button>
+      </div>
+            
       <button
         onClick={() => document.getElementById("addMealModal").showModal()}
         className="mb-6 px-6 py-3 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700"

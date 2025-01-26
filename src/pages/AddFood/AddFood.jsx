@@ -16,11 +16,10 @@ const AddFood = () => {
   const navigate = useNavigate();
   const user = useAuth();
 
-  const imageBBKey = "de16ed097feb2e2f18b42f490e78e9cc"; // ImageBB API key
-  const [imageFile, setImageFile] = useState(null); // State to store the selected image file
-  const [imageError, setImageError] = useState(""); // State for image error messages
+  const imageBBKey = "de16ed097feb2e2f18b42f490e78e9cc";
+  const [imageFile, setImageFile] = useState(null);
+  const [imageError, setImageError] = useState("");
 
-  // Function to upload the image to ImageBB and return the image URL
   const uploadImage = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
@@ -34,9 +33,8 @@ const AddFood = () => {
         }
       );
       const result = await response.json();
-
       if (result.success) {
-        return result.data.url; // Return the image URL
+        return result.data.url;
       } else {
         throw new Error("Image upload failed.");
       }
@@ -46,19 +44,15 @@ const AddFood = () => {
     }
   };
 
-  // Handle form submission
   const onSubmit = async (data) => {
     try {
-      // Validate image file
       if (!imageFile) {
         setImageError("Please upload an image");
         return;
       }
 
-      // Upload image and get the URL
       const imageUrl = await uploadImage(imageFile);
 
-      // Prepare food data
       const foodData = {
         ...data,
         image: imageUrl,
@@ -75,8 +69,10 @@ const AddFood = () => {
         status: "Upcoming",
       };
 
-      // Post the food data to the server
-      const response = await axiosSecure.post("http://localhost:3000/meals", foodData);
+      const response = await axiosSecure.post(
+        "http://localhost:3000/meals",
+        foodData
+      );
 
       if (response.status === 201 || response.status === 200) {
         toast.success("Food added successfully!");
@@ -89,38 +85,51 @@ const AddFood = () => {
   };
 
   return (
-    <div className="flex items-center justify-center rounded-lg min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 px-4 py-12">
-      <div className="backdrop-blur-md bg-white/10 border border-white/20 shadow-lg rounded-xl p-8 max-w-lg w-full">
-        <h2 className="text-3xl font-extrabold text-center text-white mb-8">
+    <div className="bg-gradient-to-br from-gray-100 via-purple-200 to-indigo-100 flex flex-col items-center justify-center py-4 px-4">
+      <div className="mb-8 text-center p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
+        <p className="text-2xl font-semibold text-black mb-4">
+          Back to Admin Dashboard?
+        </p>
+        <button
+          onClick={() => navigate("/admin-dashboard")}
+          className="px-8 py-1 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white rounded-lg text-lg shadow-lg hover:opacity-90 transition duration-300"
+        >
+          Admin Panel
+        </button>
+      </div>
+      <div className="backdrop-blur-lg bg-white border border-white/30 rounded-xl shadow-xl p-8 w-full max-w-lg">
+        <h2 className="text-4xl font-extrabold text-center text-black mb-8">
           Add Food
         </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Title Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-300">
+            <label className="block text-sm font-medium text-gray-600">
               Title
             </label>
             <input
               type="text"
               {...register("title", { required: "Title is required" })}
               placeholder="Enter food title"
-              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {errors.title && (
-              <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>
+              <p className="text-red-400 text-sm mt-1">
+                {errors.title.message}
+              </p>
             )}
           </div>
 
           {/* Category Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-300">
+            <label className="block text-sm font-medium text-gray-600">
               Category
             </label>
             <input
               type="text"
               {...register("category", { required: "Category is required" })}
               placeholder="e.g., Breakfast"
-              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {errors.category && (
               <p className="text-red-400 text-sm mt-1">
@@ -131,7 +140,7 @@ const AddFood = () => {
 
           {/* Rating Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-300">
+            <label className="block text-sm font-medium text-gray-600">
               Rating
             </label>
             <input
@@ -139,16 +148,18 @@ const AddFood = () => {
               step="0.1"
               {...register("rating", { required: "Rating is required" })}
               placeholder="Enter food rating (e.g., 4.5)"
-              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {errors.rating && (
-              <p className="text-red-400 text-sm mt-1">{errors.rating.message}</p>
+              <p className="text-red-400 text-sm mt-1">
+                {errors.rating.message}
+              </p>
             )}
           </div>
 
           {/* Price Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-300">
+            <label className="block text-sm font-medium text-gray-600">
               Price
             </label>
             <input
@@ -156,23 +167,25 @@ const AddFood = () => {
               step="0.01"
               {...register("price", { required: "Price is required" })}
               placeholder="Enter food price"
-              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {errors.price && (
-              <p className="text-red-400 text-sm mt-1">{errors.price.message}</p>
+              <p className="text-red-400 text-sm mt-1">
+                {errors.price.message}
+              </p>
             )}
           </div>
 
           {/* Image Upload Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-300">
+            <label className="block text-sm font-medium text-gray-600">
               Upload Image
             </label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setImageFile(e.target.files[0])}
-              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {imageError && (
               <p className="text-red-400 text-sm mt-1">{imageError}</p>
@@ -181,13 +194,15 @@ const AddFood = () => {
 
           {/* Description Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-300">
+            <label className="block text-sm font-medium text-gray-600">
               Description
             </label>
             <textarea
-              {...register("description", { required: "Description is required" })}
+              {...register("description", {
+                required: "Description is required",
+              })}
               placeholder="Enter food description"
-              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
               rows="3"
             ></textarea>
             {errors.description && (
@@ -199,7 +214,7 @@ const AddFood = () => {
 
           {/* Ingredients Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-300">
+            <label className="block text-sm font-medium text-gray-600">
               Ingredients
             </label>
             <input
@@ -208,7 +223,7 @@ const AddFood = () => {
                 required: "Ingredients are required",
               })}
               placeholder="Enter ingredients, separated by commas"
-              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
+              className="w-full px-4 py-3 bg-transparent border border-gray-400 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring focus:ring-indigo-500"
             />
             {errors.ingredients && (
               <p className="text-red-400 text-sm mt-1">
@@ -220,7 +235,7 @@ const AddFood = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-lg shadow-md hover:from-purple-700 hover:to-indigo-700 transition-transform transform hover:scale-105"
+            className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-lg shadow-lg hover:scale-105 transition-transform"
           >
             Add Food
           </button>

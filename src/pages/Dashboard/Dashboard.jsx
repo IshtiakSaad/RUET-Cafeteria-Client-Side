@@ -12,14 +12,9 @@ const Dashboard = () => {
   const [reviews, setReviews] = useState([]);
   const [badge, setBadge] = useState("");
   const [allMeals, setAllMeals] = useState([]);
-  //   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [isAdmin] = useAdmin();
   const BASE_URL = "http://localhost:3000";
   const navigate = useNavigate();
-
-  //   const handleAdminPanelClick = () => {
-  //     setShowAdminPanel((prev) => !prev);
-  //   };
 
   useEffect(() => {
     let isMounted = true;
@@ -49,9 +44,6 @@ const Dashboard = () => {
     };
   }, [user, BASE_URL]);
 
-
-
-  
   useEffect(() => {
     const extractedReviews = [];
     allMeals.forEach((meal) => {
@@ -60,19 +52,17 @@ const Dashboard = () => {
           extractedReviews.push({
             mealId: meal._id,
             mealTitle: meal.title,
+            likes: meal.likes,
             content: review.content,
             rating: review.rating,
             postedAt: review.postedAt,
+            reviewId: review.reviewId,
           });
         }
       });
     });
     setReviews(extractedReviews);
   }, [allMeals, user]);
-
-  //   const handleDetails = (id) => {
-  //     navigate(`/meals/${id}`);
-  //   };
 
   const handleCancelRequest = async (mealId) => {
     try {
@@ -96,14 +86,27 @@ const Dashboard = () => {
     },
   });
 
-  const handleDeleteReview = async (reviewId) => {
+  console.log(reviews);
+
+  const handleDeleteReview = async (mealId, reviewId) => {
     try {
-      await axios.delete(`/reviews/${reviewId}`);
+      const response = await axios.delete(
+        `http://localhost:3000/meals/${mealId}/reviews/${reviewId}`
+      );
+      console.log(response);
       setReviews((prev) => prev.filter((review) => review.id !== reviewId));
       alert("Review deleted successfully.");
     } catch (error) {
-      console.error(error);
+      console.error("Error deleting review:", error);
     }
+  };
+
+  const handleEditReview = (reviewId) => {
+    navigate(`/edit-review/${reviewId}`);
+  };
+
+  const handleViewMeal = (mealId) => {
+    navigate(`/meals/${mealId}`);
   };
 
   return (
@@ -119,7 +122,7 @@ const Dashboard = () => {
               Wow. You are an Admin!
             </p>
             <button
-              onClick={ () => navigate("/admin-dashboard")}
+              onClick={() => navigate("/admin-dashboard")}
               className="px-8 py-1 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white rounded-lg text-lg shadow-lg hover:opacity-90 transition duration-300"
             >
               Admin Panel
@@ -127,118 +130,166 @@ const Dashboard = () => {
           </div>
         )}
 
-        {
-          <div className="space-y-10">
-            {/* Profile */}
-            <section className="bg-white shadow-lg rounded-2xl p-6">
-              <h2 className="text-2xl font-semibold mb-4">My Profile</h2>
-              {user && (
-                <div className="flex items-center gap-6">
-                  <img
-                    src={
-                      user.user.photoURL || "https://via.placeholder.com/100"
-                    }
-                    alt="Profile"
-                    className="w-24 h-24 rounded-full border-4 border-gray-200"
-                  />
-                  <div>
-                    <p className="text-xl font-medium">
-                      {user.user.displayName || "Anonymous"}
-                    </p>
-                    <p className="text-gray-600">{user.user.email}</p>
-                    <p className="text-gray-600">Badge: <span className="btn btn-outline px-4 btn-sm btn-warning font-bold">{badge}</span></p>
-                  </div>
+        <div className="space-y-10">
+          {/* Profile */}
+          <section className="bg-white shadow-lg rounded-2xl p-6">
+            <h2 className="text-2xl font-semibold mb-4">My Profile</h2>
+            {user && (
+              <div className="flex items-center gap-6">
+                <img
+                  src={user.user.photoURL || "https://via.placeholder.com/100"}
+                  alt="Profile"
+                  className="w-24 h-24 rounded-full border-4 border-gray-200"
+                />
+                <div>
+                  <p className="text-xl font-medium">
+                    {user.user.displayName || "Anonymous"}
+                  </p>
+                  <p className="text-gray-600">{user.user.email}</p>
+                  <p className="text-gray-600">
+                    Badge:{" "}
+                    <span className="btn btn-outline px-4 btn-sm btn-warning font-bold">
+                      {badge}
+                    </span>
+                  </p>
                 </div>
-              )}
-            </section>
+              </div>
+            )}
+          </section>
 
-            {/* Requested Meals */}
-            <section className="bg-white shadow-lg rounded-2xl p-6">
-              <h2 className="text-2xl font-semibold mb-4">Requested Meals</h2>
-              {requestedMeals.length > 0 ? (
-                <ul className="space-y-4">
-                  {requestedMeals.map((meal) => (
-                    <li
-                      key={meal._id}
-                      className="flex items-center justify-between"
-                    >
-                      <div>
-                        <p className="font-semibold">{meal.title}</p>
-                        <p className="text-gray-500">
-                          Likes: {meal.likes || 0}, Reviews:{" "}
-                          {meal.reviews?.length || 0}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => handleCancelRequest(meal._id)}
-                        className="text-red-600 hover:underline"
-                      >
-                        Cancel
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500">No requested meals found.</p>
-              )}
-            </section>
-
-            {/* Reviews */}
-            <section className="bg-white shadow-lg rounded-2xl p-6">
-              <h2 className="text-2xl font-semibold mb-4">My Reviews</h2>
-              {reviews.length > 0 ? (
-                <ul className="space-y-4">
-                  {reviews.map((review) => (
-                    <li
-                      key={review.id}
-                      className="flex items-center justify-between"
-                    >
-                      <div>
-                        <p className="font-semibold">{review.mealTitle}</p>
-                        <p className="text-gray-500">{review.content}</p>
-                      </div>
-                      <button
-                        onClick={() => handleDeleteReview(review.id)}
-                        className="text-red-600 hover:underline"
-                      >
-                        Delete
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500">No reviews found.</p>
-              )}
-            </section>
-
-            {/* Payment History */}
-            <section className="bg-white shadow-lg rounded-2xl p-6">
-              <h2 className="text-2xl font-semibold mb-4">Payment History</h2>
-              {payments.length > 0 ? (
-                <table className="w-full">
+          {/* Requested Meals */}
+          <section className="bg-white shadow-lg rounded-2xl p-6">
+            <h2 className="text-2xl font-semibold mb-4">Requested Meals</h2>
+            {requestedMeals.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full table-auto">
                   <thead>
                     <tr className="text-left">
-                      <th className="text-sm">Transaction ID</th>
-                      <th className="text-sm">Amount</th>
-                      <th className="text-sm">Date</th>
+                      <th className="px-4 py-2 text-sm">Meal Title</th>
+                      <th className="px-4 py-2 text-sm">Likes</th>
+                      <th className="px-4 py-2 text-sm">Reviews</th>
+                      <th className="px-4 py-2 text-sm">Status</th>
+                      <th className="px-4 py-2 text-sm">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {payments.map((payment) => (
-                      <tr key={payment.id}>
-                        <td className="text-sm">{payment.transactionId}</td>
-                        <td className="text-sm">${payment.price}</td>
-                        <td  className="text-sm">{new Date(payment.date).toLocaleDateString()}</td>
+                    {requestedMeals.map((meal) => (
+                      <tr key={meal._id} className="border-b">
+                        <td className="px-4 py-2">{meal.title}</td>
+                        <td className="px-4 py-2">{meal.likes || 0}</td>
+                        <td className="px-4 py-2">
+                          {meal.reviews?.length || 0}
+                        </td>
+                        <td className="px-4 py-2">
+                          {meal.status || "Pending"}
+                        </td>
+                        <td className="px-4 py-2">
+                          <button
+                            onClick={() => handleCancelRequest(meal._id)}
+                            className="text-red-600 hover:underline"
+                          >
+                            Cancel
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              ) : (
-                <p className="text-gray-500">No payment history found.</p>
-              )}
-            </section>
-          </div>
-        }
+              </div>
+            ) : (
+              <p className="text-gray-500">No requested meals found.</p>
+            )}
+          </section>
+
+          {/* My Reviews */}
+          <section className="bg-white shadow-lg rounded-2xl p-6">
+            <h2 className="text-2xl font-semibold mb-4">My Reviews</h2>
+            {reviews.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full table-auto">
+                  <thead>
+                    <tr className="text-left bg-gray-100">
+                      <th className="px-4 py-2 text-sm">Meal Title</th>
+                      <th className="px-4 py-2 text-sm">Likes</th>
+                      <th className="px-4 py-2 text-sm">Review</th>
+                      <th className="px-4 py-2 text-sm">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reviews.map((review) => (
+                      <tr key={review.reviewId} className="border-b">
+                        <td className="px-4 py-2 whitespace-nowrap">
+                          {review.mealTitle}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap">
+                          {review.likes || 0}
+                        </td>
+                        <td className="px-4 py-2">{review.content}</td>
+                        <td className="flex px-4 py-2 space-x-1">
+                          <button
+                            onClick={() => handleEditReview(review.reviewId)}
+                            className="text-blue-600 hover:underline btn btn-sm btn-outline"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleDeleteReview(review.mealId, review.reviewId)
+                            }
+                            className="text-red-600 hover:underline btn btn-sm btn-outline"
+                          >
+                            Delete
+                          </button>
+                          <button
+                            onClick={() => handleViewMeal(review.mealId)}
+                            className="text-green-600 hover:underline btn btn-sm btn-outline"
+                          >
+                            View Meal
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-gray-500">No reviews found.</p>
+            )}
+          </section>
+
+          {/* Payment History */}
+          <section className="bg-white shadow-lg rounded-2xl p-6">
+            <h2 className="text-2xl font-semibold mb-4">Payment History</h2>
+            {payments.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full table-auto">
+                  <thead>
+                    <tr className="text-left">
+                      <th className="px-4 py-2 text-sm">Transaction ID</th>
+                      <th className="px-4 py-2 text-sm">Amount</th>
+                      <th className="px-4 py-2 text-sm">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {payments.map((payment) => (
+                      <tr key={payment.id} className="border-b">
+                        <td className="px-4 py-2 text-sm">
+                          {payment.transactionId}
+                        </td>
+                        <td className="px-4 py-2 text-sm">${payment.price}</td>
+                        <td className="px-4 py-2 text-sm">
+                          {new Date(payment.date).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-gray-500">No payment history found.</p>
+            )}
+          </section>
+        </div>
       </div>
     </div>
   );

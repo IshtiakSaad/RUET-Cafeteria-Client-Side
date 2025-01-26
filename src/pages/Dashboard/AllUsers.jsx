@@ -67,6 +67,7 @@ const AllUsers = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 p-2 lg:p-8">
+      
       <div className="mb-8 text-center p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
         <p className="text-2xl font-semibold text-black mb-4">
           Back to Admin Dashboard?
@@ -78,6 +79,7 @@ const AllUsers = () => {
           Admin Panel
         </button>
       </div>
+
       {/* Search Bar and Total Users */}
       <div className="flex flex-col sm:flex-row sm:justify-between items-center mb-8">
         <h2 className="text-4xl font-bold text-gray-800 mb-4 sm:mb-0">
@@ -90,7 +92,7 @@ const AllUsers = () => {
             placeholder="Search by username or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="input input-bordered w-full sm:w-80 mr-4"
+            className="input input-bordered w-full sm:w-80 mr-4 focus:ring-2 focus:ring-indigo-500"
           />
           <h2 className="text-2xl font-medium text-gray-600">
             Total Users: <span className="font-semibold">{users.length}</span>

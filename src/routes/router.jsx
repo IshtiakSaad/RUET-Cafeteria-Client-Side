@@ -17,6 +17,7 @@ import ManageUpcomingFoods from "../pages/Dashboard/ManageUpcomingFoods";
 import ManageFoodReviews from "../pages/Dashboard/ManageFoodReviews";
 import AdminDashboard from "../pages/Dashboard/AdminDashboard";
 import RequestedMeals from "../pages/Dashboard/RequestedMeals";
+import EditReviewPage from "../pages/Dashboard/EditReviewPage";
 
 const router = createBrowserRouter([
   {
@@ -109,21 +110,25 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/admin-dashboard',
+        path: "/admin-dashboard",
         element: (
-            <AdminRoute>
-                <AdminDashboard></AdminDashboard>
-            </AdminRoute>
-        )
+          <AdminRoute>
+            <AdminDashboard></AdminDashboard>
+          </AdminRoute>
+        ),
       },
       {
-        path: '/serve-meals',
+        path: "/serve-meals",
         element: (
-            <AdminRoute>
-                <RequestedMeals></RequestedMeals>
-            </AdminRoute>
-        )
-      }
+          <AdminRoute>
+            <RequestedMeals></RequestedMeals>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/edit-review/:reviewId",
+        element: <EditReviewPage></EditReviewPage>,
+      },
     ],
   },
 ]);
