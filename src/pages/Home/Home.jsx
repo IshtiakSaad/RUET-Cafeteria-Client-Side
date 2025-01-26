@@ -20,6 +20,22 @@ const Home = () => {
     //     updateFoodStatus();
     // }, []); // Empty dependency array ensures this runs only once
 
+    const addReviewIds = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/add-review-ids", {
+                method: "POST",
+            });
+    
+            const data = await response.json();
+            alert(data.message);
+        } catch (error) {
+            console.error("Failed to add review IDs:", error);
+            alert("An error occurred while updating reviews.");
+        }
+    };
+
+    addReviewIds();
+
     return (
         <div>
             <BannerSection />

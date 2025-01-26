@@ -14,6 +14,7 @@ import AllUsers from "../pages/Dashboard/AllUsers";
 import ManageFoods from "../pages/Dashboard/ManageFoods";
 import UpdateFood from "../pages/UpdateFood/UpdateFood";
 import ManageUpcomingFoods from "../pages/Dashboard/ManageUpcomingFoods";
+import ManageFoodReviews from "../pages/Dashboard/ManageFoodReviews";
 
 const router = createBrowserRouter([
   {
@@ -94,6 +95,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageUpcomingFoods></ManageUpcomingFoods>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/manage-food-reviews",
+        element: (
+          <AdminRoute>
+            <ManageFoodReviews></ManageFoodReviews>
           </AdminRoute>
         ),
       },

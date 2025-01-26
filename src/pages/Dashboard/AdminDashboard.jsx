@@ -33,6 +33,13 @@ const AdminDashboard = () => {
         >
           Manage Upcoming Food
         </button>
+        <button
+          onClick={() => navigate("/manage-food-reviews")}
+          className="w-full px-4 py-6 bg-white text-gray-800 font-medium rounded-lg shadow-lg hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-1"
+        >
+          {/* ManageFoodReviews */}
+          Manage Food Reviews
+        </button>
       </div>
     </div>
   );

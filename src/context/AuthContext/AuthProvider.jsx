@@ -48,7 +48,7 @@ const AuthProvider = ({ children }) => {
             throw new Error(errorData.error || "Failed to add/update user.");
           }
 
-          console.log("User Synced with DB.", response);
+          console.log("User Synced with DB.");
         } catch (error) {
           console.error("Error adding/updating user:", error);
           throw error;
