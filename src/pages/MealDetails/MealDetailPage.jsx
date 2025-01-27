@@ -8,7 +8,7 @@ import useAuth from "../../hooks/useAuth";
 
 const MealDetailPage = () => {
   const { id } = useParams();
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [meal, setMeal] = useState(null);
   const [likeCount, setLikeCount] = useState(0);
   const [reviews, setReviews] = useState([]);
@@ -20,29 +20,33 @@ const MealDetailPage = () => {
   const navigate = useNavigate();
   const [currentMeal, setCurrentMeal] = useState("");
   const axiosSecure = useAxiosSecure();
-  const [userBadge, setUserBadge] = useState('');
+  const [userBadge, setUserBadge] = useState("");
   const [liked, setLiked] = useState(false);
+  const [requestedMeals, setRequestedMeals] = useState([]);
 
   // Fetch meal details
   useEffect(() => {
     const fetchMealDetails = async () => {
       try {
         setLoading(true);
-        if(user){
-            const res = await axiosSecure.get(`/users/${user.uid}`);
-            setUserBadge(res.data.badge);
+        if (user) {
+          const res = await axiosSecure.get(`/users/${user.uid}`);
+          setUserBadge(res.data.badge);
         }
 
-  
         const response = await axios.get(`${BASE_URL}/meals/${id}`);
         setMeal(response.data);
         setCurrentMeal(response.data.status);
         setLikeCount(response.data.likes);
         setReviews(response.data.reviews || []);
-        
+
         // Check if likedBy exists and if the user has liked this meal
-        if (user && response.data.likedBy && response.data.likedBy.includes(user.uid)) {
-          setLiked(true);  // User has already liked the meal
+        if (
+          user &&
+          response.data.likedBy &&
+          response.data.likedBy.includes(user.uid)
+        ) {
+          setLiked(true); // User has already liked the meal
         } else {
           setLiked(false); // User has not liked the meal
         }
@@ -54,35 +58,55 @@ const MealDetailPage = () => {
       }
     };
     fetchMealDetails();
-  }, [id]);  // Also depend on user.uid to handle changes in the logged-in user
-  
+  }, [id]); // Also depend on user.uid to handle changes in the logged-in user
+
+  useEffect(() => {
+    const fetchRequestedMeals = async () => {
+      if (!user) return;
+
+      try {
+        const response = await axiosSecure.get(`/users/${user.uid}/favorites`);
+        if (response.status === 200) {
+          setRequestedMeals(response.data);
+        }
+      } catch (err) {
+        console.error("Error fetching requested meals:", err.message);
+      }
+    };
+
+    fetchRequestedMeals();
+  }, [user]);
 
   // Handle liking a meal
   const handleLike = async () => {
     if (!user) {
-        toast.error("You must be logged in to like this meal.");
+      toast.error("You must be logged in to like this meal.");
       return;
     }
-    
+
     // console.log(meal);
     // console.log(user);
     // console.log(liked);
 
-    if(liked===true){
-        toast.error("You've Already liked this meal. Try something else.")
-        return;
-    }
-    else{
-        setLiked(true);
-        // // console.log(user.uid, liked)
-        const res = await axios.post("http://localhost:3000/liked", { userId: user.uid, mealId: meal._id});
-        console.log(res);
+    if (liked === true) {
+      toast.error("You've Already liked this meal. Try something else.");
+      return;
+    } else {
+      setLiked(true);
+      // // console.log(user.uid, liked)
+      const res = await axios.post("http://localhost:3000/liked", {
+        userId: user.uid,
+        mealId: meal._id,
+      });
+      console.log(res);
     }
 
-
-    if( (userBadge==='Bronze' || userBadge==='bronze') && (meal.status==='Upcoming')){
-        toast.error("You must be Gold/Silver/Platinum User to like this meal.");
-        return;
+    if (
+      (userBadge === "Bronze" || userBadge === "bronze") &&
+      meal.status === "Upcoming"
+    ) {
+      toast.error("You must be Gold/Silver/Platinum User to like this meal.");
+      return;
     }
 
     try {
@@ -98,7 +122,7 @@ const MealDetailPage = () => {
       // If likes reach 10, set status to Available (publish)
       if (response.data.likes >= 10 && currentMeal !== "Available") {
         setCurrentMeal("Available");
-        toast.success("This Meal is now Available to Request.")
+        toast.success("This Meal is now Available to Request.");
         await axiosSecure.put(`/update-meals/${id}`, { status: "Available" });
       }
     } catch (err) {
@@ -109,34 +133,45 @@ const MealDetailPage = () => {
   // Handle requesting a meal
   const handleRequestMeal = async () => {
     if (!user) {
-        toast.error("You must be logged in to request a meal.");
+      toast.error("You must be logged in to request a meal.");
       return;
     }
+  
+    // Check if the meal is already requested
+    if (requestedMeals.some((requested) => requested._id === meal._id)) {
+      toast.error("You have already requested this meal.");
+      return;
+    }
+  
     const requestDetails = {
       ...meal,
-      status: 'requested',
+      status: "requested",
       requestedBy: user.uid,
     };
-
+  
     try {
       const response = await axios.post(
         `${BASE_URL}/users/${user.uid}/favorites`,
         { mealID: requestDetails }
       );
       if (response.status === 200) {
-        toast.success("Meal Requested Successfully! Add More or Go to Dashboard.")
+        toast.success("Meal Requested Successfully! Add More or Go to Dashboard.");
         navigate("/meals");
+  
+        // Update the requested meals list
+        setRequestedMeals([...requestedMeals, meal]);
       }
     } catch (err) {
       console.error("Error requesting meal:", err.message);
       toast.error("Failed to request meal. Please try again.");
     }
   };
+  
 
   // Handle posting a review
   const handlePostReview = async () => {
     if (!user) {
-        toast.error("You must be logged in to post review");
+      toast.error("You must be logged in to post review");
       return;
     }
 
@@ -155,7 +190,7 @@ const MealDetailPage = () => {
         setLoading(true);
         const response = await axios.get(`${BASE_URL}/meals/${id}`);
         setReviews(response.data.reviews);
-        toast.success("Review Posted Successfully!")
+        toast.success("Review Posted Successfully!");
         setLoading(false);
         setNewReview("");
         setRating(0);
@@ -199,7 +234,8 @@ const MealDetailPage = () => {
               {meal?.description || "N/A"}
             </p>
             <p className="text-sm text-gray-500 mb-4">
-              Posted by: {meal?.distributor || meal?.distributorName || "Unknown"} |{" "}
+              Posted by:{" "}
+              {meal?.distributor || meal?.distributorName || "Unknown"} |{" "}
               {meal?.postTime
                 ? new Date(meal.postTime).toLocaleDateString()
                 : "Unknown Date"}
@@ -256,7 +292,9 @@ const MealDetailPage = () => {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">No reviews yet. Be the first to review!</p>
+            <p className="text-gray-500">
+              No reviews yet. Be the first to review!
+            </p>
           )}
 
           <div className="mt-8">
