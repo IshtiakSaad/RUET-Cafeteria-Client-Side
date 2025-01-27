@@ -123,7 +123,7 @@ const MealDetailPage = () => {
       }
     } catch (err) {
       console.error("Error requesting meal:", err.message);
-      alert("Failed to request meal. Please try again.");
+      toast.error("Failed to request meal. Please try again.");
     }
   };
 
@@ -135,7 +135,7 @@ const MealDetailPage = () => {
     }
 
     if (!newReview || !rating) {
-      alert("Please add both review content and rating.");
+      toast.error("Please add both review content and rating.");
       return;
     }
 
@@ -192,7 +192,7 @@ const MealDetailPage = () => {
               {meal?.description || "N/A"}
             </p>
             <p className="text-sm text-gray-500 mb-4">
-              Posted by: {meal?.distributor || "Unknown"} |{" "}
+              Posted by: {meal?.distributor || meal?.distributorName || "Unknown"} |{" "}
               {meal?.postTime
                 ? new Date(meal.postTime).toLocaleDateString()
                 : "Unknown Date"}

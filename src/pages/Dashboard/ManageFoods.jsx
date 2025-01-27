@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Pagination from "./Pagination";
 
 const ManageFoods = () => {
   const [meals, setMeals] = useState([]);
@@ -107,61 +108,70 @@ const ManageFoods = () => {
         <p className="text-center text-lg font-medium">Loading...</p>
       ) : (
         <div className="overflow-x-auto rounded-lg shadow-md">
-          <table className="w-full border-collapse text-left text-sm">
-            <thead className="bg-gray-800">
-              <tr>
-                <th className="px-6 py-3 text-gray-300">Title</th>
-                <th className="px-6 py-3 text-gray-300">Likes</th>
-                <th className="px-6 py-3 text-gray-300">Reviews</th>
-                <th className="px-6 py-3 text-gray-300">Rating</th>
-                <th className="px-6 py-3 text-gray-300">Distributor</th>
-                <th className="px-6 py-3 text-gray-300 text-center">Status</th>
-                <th className="px-6 py-3 text-gray-300">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {meals.map((meal, index) => (
-                <tr
-                  key={meal._id}
-                  className={`${
-                    index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
-                  } hover:bg-gray-600 transition-colors duration-300`}
-                >
-                  <td className="px-6 py-3">{meal.title}</td>
-                  <td className="px-6 py-3">{meal.likes || 0}</td>
-                  <td className="px-6 py-3">{meal.reviews.length || 0}</td>
-                  <td className="px-6 py-3">{meal.rating.toFixed(1)}</td>
-                  <td className="px-6 py-3">
-                    {meal.distributorName || meal.distributor}
-                  </td>
-                  <td className="px-6 py-3 text-center">
-                    <span className="border-1 border solid px-4 py-1 rounded-lg">{meal.status}</span>
-                  </td>
-
-                  <td className="px-6 py-3 flex gap-2">
-                    <button
-                      onClick={() => navigate(`/meals/${meal._id}`)}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md"
+          <Pagination
+            items={meals}
+            itemsPerPage={10}
+            renderTableRows={(paginatedMeals) => (
+              <>
+                <thead className="bg-gray-800">
+                  <tr>
+                    <th className="px-6 py-3 text-gray-300">Title</th>
+                    <th className="px-6 py-3 text-gray-300">Likes</th>
+                    <th className="px-6 py-3 text-gray-300">Reviews</th>
+                    <th className="px-6 py-3 text-gray-300">Rating</th>
+                    <th className="px-6 py-3 text-gray-300">Distributor</th>
+                    <th className="px-6 py-3 text-gray-300 text-center">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-gray-300">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedMeals.map((meal, index) => (
+                    <tr
+                      key={meal._id}
+                      className={`${
+                        index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
+                      } hover:bg-gray-600 transition-colors duration-300`}
                     >
-                      View
-                    </button>
-                    <button
-                      onClick={() => navigate(`/updatefood/${meal._id}`)}
-                      className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded-lg shadow-md"
-                    >
-                      Update
-                    </button>
-                    <button
-                      onClick={() => handleDelete(meal._id)}
-                      className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      <td className="px-6 py-3">{meal.title}</td>
+                      <td className="px-6 py-3">{meal.likes || 0}</td>
+                      <td className="px-6 py-3">{meal.reviews.length || 0}</td>
+                      <td className="px-6 py-3">{meal.rating.toFixed(1)}</td>
+                      <td className="px-6 py-3">
+                        {meal.distributorName || meal.distributor}
+                      </td>
+                      <td className="px-6 py-3 text-center">
+                        <span className="border-1 border solid px-4 py-1 rounded-lg">
+                          {meal.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-3 flex gap-2">
+                        <button
+                          onClick={() => navigate(`/meals/${meal._id}`)}
+                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md"
+                        >
+                          View
+                        </button>
+                        <button
+                          onClick={() => navigate(`/updatefood/${meal._id}`)}
+                          className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded-lg shadow-md"
+                        >
+                          Update
+                        </button>
+                        <button
+                          onClick={() => handleDelete(meal._id)}
+                          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </>
+            )}
+          />
         </div>
       )}
     </div>

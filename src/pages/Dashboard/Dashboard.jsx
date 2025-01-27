@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import useAdmin from "../../hooks/useAdmin";
+import toast from "react-hot-toast";
+import Pagination from "./Pagination";
 
 const Dashboard = () => {
   const user = useAuth();
@@ -33,7 +35,6 @@ const Dashboard = () => {
             `${BASE_URL}/users/${user.user.uid}/favorites`
           );
           if (isMounted) setRequestedMeals(mealsResponse.data || []);
-
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -87,7 +88,7 @@ const Dashboard = () => {
     },
   });
 
-//   console.log(reviews);
+  //   console.log(reviews);
 
   const handleDeleteReview = async (mealId, reviewId) => {
     try {
@@ -96,7 +97,7 @@ const Dashboard = () => {
       );
       console.log(response);
       setReviews((prev) => prev.filter((review) => review.id !== reviewId));
-      alert("Review deleted successfully.");
+      toast.success("Review deleted successfully.");
     } catch (error) {
       console.error("Error deleting review:", error);
     }
@@ -163,39 +164,45 @@ const Dashboard = () => {
             <h2 className="text-2xl font-semibold mb-4">Requested Meals</h2>
             {requestedMeals.length > 0 ? (
               <div className="overflow-x-auto">
-                <table className="min-w-full table-auto">
-                  <thead>
-                    <tr className="text-left">
-                      <th className="px-4 py-2 text-sm">Meal Title</th>
-                      <th className="px-4 py-2 text-sm">Likes</th>
-                      <th className="px-4 py-2 text-sm">Reviews</th>
-                      <th className="px-4 py-2 text-sm">Status</th>
-                      <th className="px-4 py-2 text-sm">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {requestedMeals.map((meal) => (
-                      <tr key={meal._id} className="border-b">
-                        <td className="px-4 py-2">{meal.title}</td>
-                        <td className="px-4 py-2">{meal.likes || 0}</td>
-                        <td className="px-4 py-2">
-                          {meal.reviews?.length || 0}
-                        </td>
-                        <td className="px-4 py-2">
-                          {meal.status || "Pending"}
-                        </td>
-                        <td className="px-4 py-2">
-                          <button
-                            onClick={() => handleCancelRequest(meal._id)}
-                            className="text-red-600 hover:underline"
-                          >
-                            Cancel
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <Pagination
+                  items={requestedMeals}
+                  itemsPerPage={10}
+                  renderTableRows={(meals) => (
+                    <>
+                      <thead>
+                        <tr className="text-left">
+                          <th className="px-4 py-2 text-sm">Meal Title</th>
+                          <th className="px-4 py-2 text-sm">Likes</th>
+                          <th className="px-4 py-2 text-sm">Reviews</th>
+                          <th className="px-4 py-2 text-sm">Status</th>
+                          <th className="px-4 py-2 text-sm">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {meals.map((meal) => (
+                          <tr key={meal._id} className="border-b">
+                            <td className="px-4 py-2">{meal.title}</td>
+                            <td className="px-4 py-2">{meal.likes || 0}</td>
+                            <td className="px-4 py-2">
+                              {meal.reviews?.length || 0}
+                            </td>
+                            <td className="px-4 py-2">
+                              {meal.status || "Pending"}
+                            </td>
+                            <td className="px-4 py-2">
+                              <button
+                                onClick={() => handleCancelRequest(meal._id)}
+                                className="text-red-600 hover:underline"
+                              >
+                                Cancel
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </>
+                  )}
+                />
               </div>
             ) : (
               <p className="text-gray-500">No requested meals found.</p>
@@ -207,51 +214,62 @@ const Dashboard = () => {
             <h2 className="text-2xl font-semibold mb-4">My Reviews</h2>
             {reviews.length > 0 ? (
               <div className="overflow-x-auto">
-                <table className="min-w-full table-auto">
-                  <thead>
-                    <tr className="text-left bg-gray-100">
-                      <th className="px-4 py-2 text-sm">Meal Title</th>
-                      <th className="px-4 py-2 text-sm">Likes</th>
-                      <th className="px-4 py-2 text-sm">Review</th>
-                      <th className="px-4 py-2 text-sm">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {reviews.map((review) => (
-                      <tr key={review.reviewId} className="border-b">
-                        <td className="px-4 py-2 whitespace-nowrap">
-                          {review.mealTitle}
-                        </td>
-                        <td className="px-4 py-2 whitespace-nowrap">
-                          {review.likes || 0}
-                        </td>
-                        <td className="px-4 py-2">{review.content}</td>
-                        <td className="flex px-4 py-2 space-x-1">
-                          <button
-                            onClick={() => handleEditReview(review.reviewId)}
-                            className="text-blue-600 hover:underline btn btn-sm btn-outline"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleDeleteReview(review.mealId, review.reviewId)
-                            }
-                            className="text-red-600 hover:underline btn btn-sm btn-outline"
-                          >
-                            Delete
-                          </button>
-                          <button
-                            onClick={() => handleViewMeal(review.mealId)}
-                            className="text-green-600 hover:underline btn btn-sm btn-outline"
-                          >
-                            View Meal
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <Pagination
+                  items={reviews}
+                  itemsPerPage={10}
+                  renderTableRows={(paginatedReview) => (
+                    <>
+                      <thead>
+                        <tr className="text-left bg-gray-100">
+                          <th className="px-4 py-2 text-sm">Meal Title</th>
+                          <th className="px-4 py-2 text-sm">Likes</th>
+                          <th className="px-4 py-2 text-sm">Review</th>
+                          <th className="px-4 py-2 text-sm">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {paginatedReview.map((review) => (
+                          <tr key={review.reviewId} className="border-b">
+                            <td className="px-4 py-2 whitespace-nowrap">
+                              {review.mealTitle}
+                            </td>
+                            <td className="px-4 py-2 whitespace-nowrap">
+                              {review.likes || 0}
+                            </td>
+                            <td className="px-4 py-2">{review.content}</td>
+                            <td className="flex px-4 py-2 space-x-1">
+                              <button
+                                onClick={() =>
+                                  handleEditReview(review.reviewId)
+                                }
+                                className="text-blue-600 hover:underline btn btn-sm btn-outline"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleDeleteReview(
+                                    review.mealId,
+                                    review.reviewId
+                                  )
+                                }
+                                className="text-red-600 hover:underline btn btn-sm btn-outline"
+                              >
+                                Delete
+                              </button>
+                              <button
+                                onClick={() => handleViewMeal(review.mealId)}
+                                className="text-green-600 hover:underline btn btn-sm btn-outline"
+                              >
+                                View Meal
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </>
+                  )}
+                />
               </div>
             ) : (
               <p className="text-gray-500">No reviews found.</p>
@@ -263,28 +281,36 @@ const Dashboard = () => {
             <h2 className="text-2xl font-semibold mb-4">Payment History</h2>
             {payments.length > 0 ? (
               <div className="overflow-x-auto">
-                <table className="min-w-full table-auto">
-                  <thead>
-                    <tr className="text-left">
-                      <th className="px-4 py-2 text-sm">Transaction ID</th>
-                      <th className="px-4 py-2 text-sm">Amount</th>
-                      <th className="px-4 py-2 text-sm">Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {payments.map((payment) => (
-                      <tr key={payment.id} className="border-b">
-                        <td className="px-4 py-2 text-sm">
-                          {payment.transactionId}
-                        </td>
-                        <td className="px-4 py-2 text-sm">${payment.price}</td>
-                        <td className="px-4 py-2 text-sm">
-                          {new Date(payment.date).toLocaleDateString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <Pagination
+                  items={payments}
+                  itemsPerPage={10}
+                  renderTableRows={(paginatedPayment) => (
+                    <>
+                      <thead>
+                        <tr className="text-left">
+                          <th className="px-4 py-2 text-sm">Transaction ID</th>
+                          <th className="px-4 py-2 text-sm">Amount</th>
+                          <th className="px-4 py-2 text-sm">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {paginatedPayment.map((payment) => (
+                          <tr key={payment.id} className="border-b">
+                            <td className="px-4 py-2 text-sm">
+                              {payment.transactionId}
+                            </td>
+                            <td className="px-4 py-2 text-sm">
+                              ${payment.price}
+                            </td>
+                            <td className="px-4 py-2 text-sm">
+                              {new Date(payment.date).toLocaleDateString()}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </>
+                  )}
+                />
               </div>
             ) : (
               <p className="text-gray-500">No payment history found.</p>

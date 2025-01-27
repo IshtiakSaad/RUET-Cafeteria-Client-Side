@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import Pagination from "./Pagination";
 
 const RequestedMeals = () => {
   const axiosSecure = useAxiosSecure();
@@ -63,7 +64,6 @@ const RequestedMeals = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen flex flex-col items-center">
-      
       <div className="mb-8 text-center p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
         <p className="text-2xl font-semibold text-black mb-4">
           Back to Admin Dashboard?
@@ -75,7 +75,7 @@ const RequestedMeals = () => {
           Admin Panel
         </button>
       </div>
-      
+
       {/* Search Bar and Total Meals */}
       <div className="flex flex-col justify-between w-full max-w-5xl sm:flex-row sm:justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">
@@ -91,77 +91,95 @@ const RequestedMeals = () => {
             className="input input-bordered w-full sm:w-80 mr-4"
           />
           <h2 className="hidden lg:block text-2xl font-medium text-gray-600">
-            Total Meals: <span className="font-semibold">{requestedMeals.length}</span>
+            Total Meals:{" "}
+            <span className="font-semibold">{requestedMeals.length}</span>
           </h2>
         </div>
       </div>
 
-
       {requestedMeals.length > 0 ? (
         <div className="overflow-x-auto w-full max-w-5xl">
-          <table className="w-full text-left border-collapse border border-gray-300 shadow-lg rounded-lg">
-            <thead className="bg-gray-200 text-gray-700 text-sm uppercase tracking-wide">
-              <tr>
-                <th className="px-6 py-4 border-b border-gray-300">Image</th>
-                <th className="px-6 py-4 border-b border-gray-300">Title</th>
-                <th className="px-6 py-4 border-b border-gray-300">
-                  User Email
-                </th>
-                <th className="px-6 py-4 border-b border-gray-300">Name</th>
-                <th className="px-6 py-4 border-b border-gray-300">Status</th>
-                <th className="px-6 py-4 border-b border-gray-300">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requestedMeals.map((meal, index) => (
-                <tr
-                  key={index}
-                  className={`${
-                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                  } hover:bg-gray-100 transition`}
-                >
-                  <td className="px-6 py-4">
-                    <img
-                      src={meal.image}
-                      alt={meal.title}
-                      className="w-12 h-12 object-cover rounded-lg border border-gray-200 shadow-sm"
-                    />
-                  </td>
-                  <td className="px-6 py-4 text-gray-800 font-medium">
-                    {meal.title}
-                  </td>
-                  <td className="px-6 py-4 text-gray-600">{meal.user.email}</td>
-                  <td className="px-6 py-4 text-gray-600">{meal.user.name}</td>
-                  <td className="px-6 py-4 text-gray-800">
-                    <span
-                      className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                        meal.status === "delivered"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}
+          <Pagination
+            items={requestedMeals}
+            itemsPerPage={10}
+            renderTableRows={(paginatedMeals) => (
+              <>
+                <thead className="bg-gray-200 text-gray-700 text-sm uppercase tracking-wide">
+                  <tr>
+                    <th className="px-6 py-4 border-b border-gray-300">
+                      Image
+                    </th>
+                    <th className="px-6 py-4 border-b border-gray-300">
+                      Title
+                    </th>
+                    <th className="px-6 py-4 border-b border-gray-300">
+                      User Email
+                    </th>
+                    <th className="px-6 py-4 border-b border-gray-300">Name</th>
+                    <th className="px-6 py-4 border-b border-gray-300">
+                      Status
+                    </th>
+                    <th className="px-6 py-4 border-b border-gray-300">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedMeals.map((meal, index) => (
+                    <tr
+                      key={index}
+                      className={`${
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                      } hover:bg-gray-100 transition`}
                     >
-                      {meal.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <button
-                      onClick={() =>
-                        handleServeMeal(meal._id, meal.user.userId)
-                      }
-                      disabled={meal.status === "served"}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition focus:outline-none ${
-                        meal.status === "delivered"
-                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          : "bg-blue-500 text-white hover:bg-blue-600"
-                      }`}
-                    >
-                      {meal.status === "delivered" ? "Served" : "Serve"}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      <td className="px-6 py-4">
+                        <img
+                          src={meal.image}
+                          alt={meal.title}
+                          className="w-12 h-12 object-cover rounded-lg border border-gray-200 shadow-sm"
+                        />
+                      </td>
+                      <td className="px-6 py-4 text-gray-800 font-medium">
+                        {meal.title}
+                      </td>
+                      <td className="px-6 py-4 text-gray-600">
+                        {meal.user.email}
+                      </td>
+                      <td className="px-6 py-4 text-gray-600">
+                        {meal.user.name}
+                      </td>
+                      <td className="px-6 py-4 text-gray-800">
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                            meal.status === "delivered"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-yellow-100 text-yellow-700"
+                          }`}
+                        >
+                          {meal.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <button
+                          onClick={() =>
+                            handleServeMeal(meal._id, meal.user.userId)
+                          }
+                          disabled={meal.status === "served"}
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition focus:outline-none ${
+                            meal.status === "delivered"
+                              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                              : "bg-blue-500 text-white hover:bg-blue-600"
+                          }`}
+                        >
+                          {meal.status === "delivered" ? "Served" : "Serve"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </>
+            )}
+          />
         </div>
       ) : (
         <p className="text-gray-500 text-lg">No requested meals found.</p>

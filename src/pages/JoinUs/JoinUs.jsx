@@ -73,7 +73,7 @@ const JoinUs = () => {
       navigate("/");
     } catch (error) {
       console.error("Error during registration:", error.message);
-      alert(error.message);
+    //   alert(error.message);
     }
   };
 
@@ -88,7 +88,7 @@ const JoinUs = () => {
     //   alert("Social Login Successful!");
     } catch (error) {
       console.error(error.message);
-      alert(error.message);
+    //   alert(error.message);
     }
   };
 

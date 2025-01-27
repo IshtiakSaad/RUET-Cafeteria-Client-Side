@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const EditReviewPage = () => {
   const { reviewId } = useParams(); // Get the review ID from URL params
@@ -38,12 +39,12 @@ const EditReviewPage = () => {
       });
 
       if (response.status === 200) {
-        alert("Review updated successfully!");
+        toast.success("Review updated successfully!");
         navigate(`/dashboard`); // Redirect back to the dashboard or review list after updating
       }
     } catch (error) {
       console.error("Error updating review:", error);
-      alert("Failed to update review.");
+      toast.error("Failed to update review.");
     } finally {
       setIsLoading(false);
     }

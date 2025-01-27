@@ -16,7 +16,8 @@ const AddFood = () => {
   const navigate = useNavigate();
   const user = useAuth();
 
-  const imageBBKey = "de16ed097feb2e2f18b42f490e78e9cc";
+  const imageBBKey = process.env.REACT_APP_IMAGE_BB_KEY;
+  console.log(imageBBKey);
   const [imageFile, setImageFile] = useState(null);
   const [imageError, setImageError] = useState("");
 

@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { FaTrashAlt } from "react-icons/fa";
 import { GrUserAdmin } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
+import Pagination from "./Pagination";
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -67,7 +68,6 @@ const AllUsers = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 p-2 lg:p-8">
-      
       <div className="mb-8 text-center p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
         <p className="text-2xl font-semibold text-black mb-4">
           Back to Admin Dashboard?
@@ -102,63 +102,77 @@ const AllUsers = () => {
 
       {/* Users Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg bg-white/90">
-        <table className="table-auto w-full border-collapse border border-gray-300">
-          <thead className="bg-gray-800 text-white text-left">
-            <tr>
-              <th className="px-6 py-3 border-b border-gray-300">#</th>
-              <th className="px-6 py-3 border-b border-gray-300">Name</th>
-              <th className="px-6 py-3 border-b border-gray-300">Email</th>
-              <th className="px-6 py-3 border-b border-gray-300">Subscription</th>
-              <th className="px-6 py-3 border-b border-gray-300">Role</th>
-              <th className="px-6 py-3 border-b border-gray-300">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr
-                key={user._id}
-                className={`${
-                  index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                } hover:bg-gray-200 transition duration-200`}
-              >
-                <td className="px-6 py-4 border-b border-gray-300">
-                  {index + 1}
-                </td>
-                <td className="px-6 py-4 border-b border-gray-300">
-                  {user.displayName}
-                </td>
-                <td className="px-6 py-4 border-b border-gray-300">
-                  {user.email}
-                </td>
-                <td className="px-6 py-4 border-b border-gray-300">
-                  {user.badge}
-                </td>
-                <td className="px-6 py-4 border-b border-gray-300">
-                  {user.role === "admin" ? (
-                    <span className="text-green-600 font-semibold">Admin</span>
-                  ) : (
-                    <button
-                      onClick={() => handleMakeAdmin(user)}
-                      className="p-2 rounded-full bg-green-100 hover:bg-green-200 transition duration-300"
-                      title="Make Admin"
-                    >
-                      <GrUserAdmin className="text-green-600 text-xl" />
-                    </button>
-                  )}
-                </td>
-                <td className="px-6 py-4 border-b border-gray-300">
-                  <button
-                    onClick={() => handleDeleteUser(user)}
-                    className="p-2 rounded-full bg-red-100 hover:bg-red-200 transition duration-300"
-                    title="Delete User"
+        <Pagination
+          className="table-auto w-full border-collapse border border-gray-300"
+          items={users}
+          itemsPerPage={10}
+          renderTableRows={(user) => (
+            <>
+              <thead className="bg-gray-800 text-white text-left">
+                <tr>
+                  <th className="px-6 py-3 border-b border-gray-300">#</th>
+                  <th className="px-6 py-3 border-b border-gray-300">Name</th>
+                  <th className="px-6 py-3 border-b border-gray-300">Email</th>
+                  <th className="px-6 py-3 border-b border-gray-300">
+                    Subscription
+                  </th>
+                  <th className="px-6 py-3 border-b border-gray-300">Role</th>
+                  <th className="px-6 py-3 border-b border-gray-300">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user, index) => (
+                  <tr
+                    key={user._id}
+                    className={`${
+                      index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                    } hover:bg-gray-200 transition duration-200`}
                   >
-                    <FaTrashAlt className="text-red-600 text-xl" />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    <td className="px-6 py-4 border-b border-gray-300">
+                      {index + 1}
+                    </td>
+                    <td className="px-6 py-4 border-b border-gray-300">
+                      {user.displayName}
+                    </td>
+                    <td className="px-6 py-4 border-b border-gray-300">
+                      {user.email}
+                    </td>
+                    <td className="px-6 py-4 border-b border-gray-300">
+                      {user.badge}
+                    </td>
+                    <td className="px-6 py-4 border-b border-gray-300">
+                      {user.role === "admin" ? (
+                        <span className="text-green-600 font-semibold">
+                          Admin
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => handleMakeAdmin(user)}
+                          className="p-2 rounded-full bg-green-100 hover:bg-green-200 transition duration-300"
+                          title="Make Admin"
+                        >
+                          <GrUserAdmin className="text-green-600 text-xl" />
+                        </button>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 border-b border-gray-300">
+                      <button
+                        onClick={() => handleDeleteUser(user)}
+                        className="p-2 rounded-full bg-red-100 hover:bg-red-200 transition duration-300"
+                        title="Delete User"
+                      >
+                        <FaTrashAlt className="text-red-600 text-xl" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </>
+          )}
+        />
+        {/* </table> */}
       </div>
     </div>
   );
