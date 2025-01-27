@@ -3,6 +3,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
+import toast from "react-hot-toast";
 
 const RequestedMeals = () => {
   const axiosSecure = useAxiosSecure();
@@ -55,9 +56,10 @@ const RequestedMeals = () => {
       );
 
       //   setRequestedMeals(updatedMeals);
-
+      toast.success("Meal is Delivered!")
       console.log("Meal status updated successfully.");
     } catch (error) {
+      toast.error("Failed to Deliver the Meal.")
       console.error("Error updating meal status:", error);
     }
   };

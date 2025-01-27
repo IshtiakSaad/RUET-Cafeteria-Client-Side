@@ -35,6 +35,7 @@ const Dashboard = () => {
             `${BASE_URL}/users/${user.user.uid}/favorites`
           );
           if (isMounted) setRequestedMeals(mealsResponse.data || []);
+          console.log(mealsResponse.data);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -45,6 +46,8 @@ const Dashboard = () => {
       isMounted = false;
     };
   }, [user, BASE_URL]);
+
+  console.log(requestedMeals);
 
   useEffect(() => {
     const extractedReviews = [];
@@ -72,7 +75,11 @@ const Dashboard = () => {
         `${BASE_URL}/users/${user.user.uid}/favorites/${mealId}`,
         { method: "DELETE" }
       );
-      if (!response.ok) throw new Error("Failed to remove meal.");
+      if(response.ok) toast.success("Request is Canceled.")
+      if (!response.ok){
+        toast.error("Failed to Cancel Your Request. Please Try Again!")
+        throw new Error("Failed to remove meal.");
+      }
       setRequestedMeals((prev) => prev.filter((fav) => fav._id !== mealId));
     } catch (error) {
       console.error(error);
@@ -99,7 +106,8 @@ const Dashboard = () => {
       setReviews((prev) => prev.filter((review) => review.id !== reviewId));
       toast.success("Review deleted successfully.");
     } catch (error) {
-      console.error("Error deleting review:", error);
+      toast.error("Error deleting review!");
+      console.error(error);
     }
   };
 

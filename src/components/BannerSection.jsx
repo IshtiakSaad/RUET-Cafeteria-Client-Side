@@ -45,7 +45,7 @@ const Banner = () => {
           </div>
           <div>
             <img
-              src="https://bdc2020.o0bc.com/wp-content/uploads/2017/03/915e64a6-8ea5-11e3-a0be-4f55351c3ffa.jpg"
+              src="https://i.insider.com/50cdfae46bb3f7604c000009?width=800&format=jpeg&auto=webp"
               alt="Banner 2"
             />
             <p className="legend">Hostel Dining 2</p>

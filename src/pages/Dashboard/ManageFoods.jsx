@@ -83,7 +83,10 @@ const ManageFoods = () => {
 
       <div className="flex justify-end mb-6 gap-4">
         <button
-          onClick={() => handleSort("likes")}
+          onClick={() => {
+            handleSort("likes");
+            toast.success("Sorted by Likes");
+          }}
           className={`px-4 py-2 rounded-lg font-medium shadow-md transition-all duration-300 ${
             sortBy === "likes"
               ? "bg-purple-600 text-white"
@@ -93,7 +96,10 @@ const ManageFoods = () => {
           Sort by Likes
         </button>
         <button
-          onClick={() => handleSort("reviews")}
+          onClick={() => {
+            handleSort("reviews");
+            toast.success("Sorted by Reviews Count.")
+          }}
           className={`px-4 py-2 rounded-lg font-medium shadow-md transition-all duration-300 ${
             sortBy === "reviews"
               ? "bg-purple-600 text-white"

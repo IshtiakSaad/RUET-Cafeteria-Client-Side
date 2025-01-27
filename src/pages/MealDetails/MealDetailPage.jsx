@@ -28,9 +28,11 @@ const MealDetailPage = () => {
     const fetchMealDetails = async () => {
       try {
         setLoading(true);
-  
-        const res = await axiosSecure.get(`/users/${user.uid}`);
-        setUserBadge(res.data.badge);
+        if(user){
+            const res = await axiosSecure.get(`/users/${user.uid}`);
+            setUserBadge(res.data.badge);
+        }
+
   
         const response = await axios.get(`${BASE_URL}/meals/${id}`);
         setMeal(response.data);
@@ -39,7 +41,7 @@ const MealDetailPage = () => {
         setReviews(response.data.reviews || []);
         
         // Check if likedBy exists and if the user has liked this meal
-        if (response.data.likedBy && response.data.likedBy.includes(user.uid)) {
+        if (user && response.data.likedBy && response.data.likedBy.includes(user.uid)) {
           setLiked(true);  // User has already liked the meal
         } else {
           setLiked(false); // User has not liked the meal
@@ -52,7 +54,7 @@ const MealDetailPage = () => {
       }
     };
     fetchMealDetails();
-  }, [id, user.uid]);  // Also depend on user.uid to handle changes in the logged-in user
+  }, [id]);  // Also depend on user.uid to handle changes in the logged-in user
   
 
   // Handle liking a meal
@@ -67,6 +69,7 @@ const MealDetailPage = () => {
     // console.log(liked);
 
     if(liked===true){
+        toast.error("You've Already liked this meal. Try something else.")
         return;
     }
     else{
@@ -89,11 +92,13 @@ const MealDetailPage = () => {
 
       if (response.status === 200) {
         setLikeCount(response.data.likes);
+        toast.success("You Liked this Meal!");
       }
 
       // If likes reach 10, set status to Available (publish)
       if (response.data.likes >= 10 && currentMeal !== "Available") {
         setCurrentMeal("Available");
+        toast.success("This Meal is now Available to Request.")
         await axiosSecure.put(`/update-meals/${id}`, { status: "Available" });
       }
     } catch (err) {
@@ -119,7 +124,8 @@ const MealDetailPage = () => {
         { mealID: requestDetails }
       );
       if (response.status === 200) {
-        navigate("/");
+        toast.success("Meal Requested Successfully! Add More or Go to Dashboard.")
+        navigate("/meals");
       }
     } catch (err) {
       console.error("Error requesting meal:", err.message);
@@ -149,6 +155,7 @@ const MealDetailPage = () => {
         setLoading(true);
         const response = await axios.get(`${BASE_URL}/meals/${id}`);
         setReviews(response.data.reviews);
+        toast.success("Review Posted Successfully!")
         setLoading(false);
         setNewReview("");
         setRating(0);

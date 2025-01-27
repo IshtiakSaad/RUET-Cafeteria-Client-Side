@@ -81,7 +81,8 @@ const AddFood = () => {
         reset();
       }
     } catch (error) {
-      toast.error(error.message || "Failed to add food.");
+      toast.error("Failed to add food.");
+      console.log(error.message);
     }
   };
 

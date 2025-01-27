@@ -31,12 +31,6 @@ const ManageFoodReviews = () => {
 
   // Handle deleting a review
   const handleDeleteReview = async (mealId, reviewId) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this review?"
-    );
-
-    if (!confirmed) return;
-
     try {
       const response = await axiosSecure.delete(
         `/meals/${mealId}/reviews/${reviewId}`

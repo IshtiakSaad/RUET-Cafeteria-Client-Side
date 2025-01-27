@@ -171,25 +171,6 @@ const UpdateFood = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-300">
-              Distributor
-            </label>
-            <input
-              type="text"
-              {...register("distributor", {
-                required: "Distributor is required",
-              })}
-              placeholder="Enter distributor name"
-              className="w-full px-4 py-2 bg-transparent border border-gray-400 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring focus:ring-purple-500"
-            />
-            {errors.distributor && (
-              <p className="text-red-400 text-sm mt-1">
-                {errors.distributor.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-300">
               Description
             </label>
             <textarea

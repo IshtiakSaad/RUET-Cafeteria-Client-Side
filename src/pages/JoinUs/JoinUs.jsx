@@ -82,7 +82,7 @@ const JoinUs = () => {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
 
-      toast.success("Welcome!");
+      toast.success("Welcome! Google Authentication Successful.");
       navigate("/");
       // User details are automatically synced with your database via AuthProvider
     //   alert("Social Login Successful!");
