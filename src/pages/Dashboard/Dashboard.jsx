@@ -69,6 +69,8 @@ const Dashboard = () => {
     setReviews(extractedReviews);
   }, [allMeals, user]);
 
+//   console.log(reviews);
+
   const handleCancelRequest = async (mealId) => {
     try {
       const response = await fetch(
@@ -111,8 +113,8 @@ const Dashboard = () => {
     }
   };
 
-  const handleEditReview = (reviewId) => {
-    navigate(`/edit-review/${reviewId}`);
+  const handleEditReview = (mealId, reviewId) => {
+    navigate(`/edit-review/${mealId}/${reviewId}`);
   };
 
   const handleViewMeal = (mealId) => {
@@ -248,7 +250,7 @@ const Dashboard = () => {
                             <td className="flex px-4 py-2 space-x-1">
                               <button
                                 onClick={() =>
-                                  handleEditReview(review.reviewId)
+                                  handleEditReview(review.mealId, review.reviewId)
                                 }
                                 className="text-blue-600 hover:underline btn btn-sm btn-outline"
                               >

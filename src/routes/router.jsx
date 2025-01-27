@@ -143,7 +143,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/edit-review/:reviewId",
+        path: "/edit-review/:mealId/:reviewId",
         element: (
           <PrivateRoute>
               <EditReviewPage></EditReviewPage>
