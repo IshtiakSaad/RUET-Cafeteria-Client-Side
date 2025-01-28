@@ -2,6 +2,14 @@
 
 This repository contains the client-side code for the **Hostel Management System**, developed using React.js and Vite. The client application enables students to log in, view meals, post reviews, and manage their profiles. It also allows administrators to manage meals and user reviews efficiently.
 
+## Live Site
+
+[Live Site URL](https://ruet-hall-3cb68.web.app/)  
+
+Admin Credentials:
+- Email: admin@hostel.com
+- Pass: Asd123
+
 ## Features
 
 1. **Student and Admin Login**:
@@ -100,10 +108,6 @@ This repository contains the client-side code for the **Hostel Management System
 - **`npm run preview`**: Preview the production build.
 - **`npm run lint`**: Run ESLint to check for code quality.
 
-## Live Site
-
-[Live Site URL](#)  
-(Admin credentials will be provided upon request.)
 
 ## GitHub Repository
 
