@@ -21,7 +21,7 @@ const CheckoutForm = ({ packageName, price }) => {
   // console.log(user.user.email, user.user.uid);
   useEffect(() => {
     axios
-      .post("http://localhost:3000/create-payment-intent", {
+      .post("https://ruet-hostel.vercel.app/create-payment-intent", {
         price: totalPrice,
       })
       .then((response) => {
@@ -87,7 +87,7 @@ const CheckoutForm = ({ packageName, price }) => {
       console.log("Client: ", payment);
 
       try {
-        const res = await axios.post("http://localhost:3000/payments", payment);
+        const res = await axios.post("https://ruet-hostel.vercel.app/payments", payment);
         console.log("Payment Saved: ", res);
 
         toast.success("Payment saved!");

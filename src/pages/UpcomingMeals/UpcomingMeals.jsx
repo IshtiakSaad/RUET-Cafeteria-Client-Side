@@ -12,7 +12,7 @@ const UpcomingMeals = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const mealsResponse = await axios.get("http://localhost:3000/mealsbycategory");
+        const mealsResponse = await axios.get("https://ruet-hostel.vercel.app/mealsbycategory");
         const upcomingMeals = mealsResponse.data.filter(
           (meal) => meal.status === "Upcoming"
         );

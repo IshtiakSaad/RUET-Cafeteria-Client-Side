@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [badge, setBadge] = useState("");
   const [allMeals, setAllMeals] = useState([]);
   const [isAdmin] = useAdmin();
-  const BASE_URL = "http://localhost:3000";
+  const BASE_URL = "https://ruet-hostel.vercel.app";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const Dashboard = () => {
     if (user) {
       const fetchData = async () => {
         try {
-          const resMeals = (await axios.get(`${BASE_URL}/meals`)).data;
+          const resMeals = (await axios.get(`${BASE_URL}/mealsbycategory`)).data;
           if (isMounted) setAllMeals(resMeals);
 
           const fetchedBadge = (
@@ -69,7 +69,7 @@ const Dashboard = () => {
     setReviews(extractedReviews);
   }, [allMeals, user]);
 
-//   console.log(reviews);
+  console.log(allMeals);
 
   const handleCancelRequest = async (mealId) => {
     try {
@@ -102,7 +102,7 @@ const Dashboard = () => {
   const handleDeleteReview = async (mealId, reviewId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/meals/${mealId}/reviews/${reviewId}`
+        `https://ruet-hostel.vercel.app/meals/${mealId}/reviews/${reviewId}`
       );
       console.log(response);
       setReviews((prev) => prev.filter((review) => review.id !== reviewId));
@@ -122,7 +122,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="px-2 lg:p-8 bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
+    <div className="p-4 lg:p-8 bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-extrabold mb-6 text-center text-gray-800">
           User Dashboard
@@ -147,20 +147,20 @@ const Dashboard = () => {
           <section className="bg-white shadow-lg rounded-2xl p-6">
             <h2 className="text-2xl font-semibold mb-4">My Profile</h2>
             {user && (
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-4 md:gap-6">
                 <img
                   src={user.user.photoURL || "https://via.placeholder.com/100"}
                   alt="Profile"
-                  className="w-24 h-24 rounded-full border-4 border-gray-200"
+                  className="w-20 h-20 lg:w-24 lg:h-24 rounded-full border-4 border-gray-200"
                 />
                 <div>
                   <p className="text-xl font-medium">
                     {user.user.displayName || "Anonymous"}
                   </p>
                   <p className="text-gray-600">{user.user.email}</p>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 flex flex-row gap-2">
                     Badge:{" "}
-                    <span className="btn btn-outline px-4 btn-sm btn-warning font-bold">
+                    <span className="border-solid border-2 rounded-full border-amber-300 px-4 font-bold">
                       {badge}
                     </span>
                   </p>

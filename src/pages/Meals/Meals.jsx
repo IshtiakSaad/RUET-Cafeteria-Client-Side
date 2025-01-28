@@ -26,7 +26,7 @@ const Meals = () => {
             limit: 10,             // Limit the number of results per page
         };
 
-        const mealsResponse = await axios.get("http://localhost:3000/meals", { params });
+        const mealsResponse = await axios.get("https://ruet-hostel.vercel.app/meals", { params });
         const availableMeals = mealsResponse.data.filter(
             (meal) => meal.status === "Available"
         );

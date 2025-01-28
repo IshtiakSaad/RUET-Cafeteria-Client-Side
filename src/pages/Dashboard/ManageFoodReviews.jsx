@@ -13,7 +13,7 @@ const ManageFoodReviews = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        const response = await axiosSecure.get("/meals");
+        const response = await axiosSecure.get("/mealsbycategory");
         const availableMeals = response.data.filter(
           (meal) => meal.reviews?.length > 0
         );

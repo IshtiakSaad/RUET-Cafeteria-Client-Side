@@ -71,7 +71,7 @@ const AddFood = () => {
       };
 
       const response = await axiosSecure.post(
-        "http://localhost:3000/meals",
+        "https://ruet-hostel.vercel.app/meals",
         foodData
       );
 

@@ -1,67 +1,62 @@
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // import the carousel's CSS
+import { useState, useEffect } from "react";
+
+const images = [
+  "https://eatdrinkflash.co.uk/wp-content/uploads/2021/06/DSC00807-scaled.jpg",
+  "https://www.eat-and-breathe.co.uk/app/uploads/2023/12/SG231006_STM_GRP_E_B_Food_Photography_Blog_Assets_Oct_2023_1920x500_top_banner1__1_-768x500.jpeg",
+  "https://www.photojaanic.com/blog/wp-content/uploads/sites/2/2017/07/food-photography-tips-photojaanic-3-1-1080x720.jpg",
+];
 
 const Banner = () => {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 5000); // Change image every 5 seconds
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section className="relative w-11/12 lg:w-3/4 mx-auto rounded-2xl overflow-hidden bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-2xl">
-      {/* Slider Content */}
-      <div className="container mx-auto px-8 py-16 text-center lg:text-left relative z-10">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-wide">
-          Welcome to Hostel Dining
+    <section className="relative w-11/12 xl:w-3/4 mx-auto rounded-2xl overflow-hidden shadow-xl min-h-[400px] sm:min-h-[550px] lg:min-h-[650px] transition-all duration-700">
+      {/* Image Slideshow */}
+      <div className="absolute inset-0 transition-opacity duration-1000 ease-in-out">
+        {images.map((src, index) => (
+          <img
+            key={index}
+            src={src}
+            alt={`Slide ${index + 1}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+              index === currentImage ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Overlay for Readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/80 to-gray-800/40 z-10"></div>
+
+      {/* Content */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 px-6 sm:px-12">
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          Welcome to RUET Hostel
         </h1>
-        <p className="text-base sm:text-lg md:text-xl font-light mb-10">
+        <p className="text-sm sm:text-lg font-light text-gray-300 mt-3 max-w-xl">
           Manage your meals, explore categories, and enjoy a seamless hostel
           dining experience.
         </p>
 
         {/* Search Field */}
-        <div className="flex flex-col lg:flex-row lg:justify-start items-center gap-4 lg:gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-lg mt-6">
           <input
             type="text"
             placeholder="Search meals or categories..."
-            className="w-full max-w-lg px-6 py-3 text-gray-900 rounded-full shadow-lg focus:outline-none focus:ring-4 focus:ring-gray-500 transition-all duration-300"
+            className="w-full px-6 py-3 rounded-full shadow-lg text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-500 transition-all duration-300 placeholder-gray-400"
           />
-          <button className="btn bg-gray-800 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-500 transition-all duration-300">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg focus:ring-4 focus:ring-blue-500 transition-all duration-300">
             Search
           </button>
         </div>
       </div>
-
-      {/* Carousel Component */}
-      <div className="absolute inset-0 z-0">
-        <Carousel
-          showArrows={true}
-          autoPlay={true}
-          infiniteLoop={true}
-          interval={5000} // Adjust the timing between slides
-          stopOnHover={true}
-        >
-          <div>
-            <img
-              src="https://c8.alamy.com/comp/FWX55G/munich-germany-08th-apr-2016-a-view-of-the-employee-cafeteria-during-FWX55G.jpg"
-              alt="Banner 1"
-            />
-            <p className="legend">Hostel Dining 1</p>
-          </div>
-          <div>
-            <img
-              src="https://i.insider.com/50cdfae46bb3f7604c000009?width=800&format=jpeg&auto=webp"
-              alt="Banner 2"
-            />
-            <p className="legend">Hostel Dining 2</p>
-          </div>
-          <div>
-            <img
-              src="https://cloudfront-eu-central-1.images.arcpublishing.com/irishtimes/RGBAQF5PV4YUCPF2PKY5SYOZQM.jpg"
-              alt="Banner 3"
-            />
-            <p className="legend">Hostel Dining 3</p>
-          </div>
-        </Carousel>
-      </div>
-
-      {/* Subtle Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-transparent to-gray-800 opacity-70"></div>
     </section>
   );
 };

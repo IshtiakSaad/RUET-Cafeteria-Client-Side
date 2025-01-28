@@ -16,7 +16,7 @@ const MealDetailPage = () => {
   const [rating, setRating] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const BASE_URL = "http://localhost:3000";
+  const BASE_URL = "https://ruet-hostel.vercel.app";
   const navigate = useNavigate();
   const [currentMeal, setCurrentMeal] = useState("");
   const axiosSecure = useAxiosSecure();
@@ -94,7 +94,7 @@ const MealDetailPage = () => {
     } else {
       setLiked(true);
       // // console.log(user.uid, liked)
-      const res = await axios.post("http://localhost:3000/liked", {
+      const res = await axios.post("https://ruet-hostel.vercel.app/liked", {
         userId: user.uid,
         mealId: meal._id,
       });
@@ -218,13 +218,13 @@ const MealDetailPage = () => {
 
   // Render component
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-gray-100 via-white to-gray-200 p-8">
-      <div className="w-full lg:w-3/4 mx-auto bg-white/90 shadow-lg rounded-2xl p-8">
-        <div className="flex flex-col lg:flex-row items-start gap-6">
+    <div className="min-h-screen bg-gradient-to-tr from-gray-100 via-white to-gray-200 md:p-8">
+      <div className="w-full lg:w-3/4 mx-auto bg-white/90 shadow-lg md:rounded-2xl p-8">
+        <div className="flex flex-col md:flex-row items-start gap-6">
           <img
             src={meal?.image || "default-image.jpg"}
             alt={meal?.title || "Meal"}
-            className="w-full lg:w-1/2 rounded-lg shadow-md"
+            className="w-full md:w-1/2 rounded-lg shadow-md"
           />
           <div className="flex-1">
             <h1 className="text-4xl font-extrabold text-gray-800 mb-4">

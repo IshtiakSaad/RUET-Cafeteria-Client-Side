@@ -18,7 +18,7 @@ const ManageFoods = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:3000/mealsbycategory${
+        `https://ruet-hostel.vercel.app/mealsbycategory${
           sortOption ? `?sortBy=${sortOption}` : ""
         }`
       );

@@ -21,7 +21,7 @@ const EditReviewPage = () => {
     try {
       // Send PUT request to update the review
       console.log(`/reviews/${mealId}/${reviewId}`);
-      const response = await axios.patch(`http://localhost:3000/reviews/${mealId}/${reviewId}`, {
+      const response = await axios.patch(`https://ruet-hostel.vercel.app/reviews/${mealId}/${reviewId}`, {
         content,
         rating,
       });

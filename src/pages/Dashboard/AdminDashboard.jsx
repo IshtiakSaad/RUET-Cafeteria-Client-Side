@@ -4,7 +4,7 @@ import AdminProfile from "./AdminProfile";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   return (
-    <div className="rounded-lg p-8 min-h-screen bg-gradient-to-br from-indigo-50 via-indigo-100 to-indigo-50">
+    <div className="rounded-lg p-2 md:p-8 min-h-screen bg-gradient-to-br from-indigo-50 via-indigo-100 to-indigo-50">
       {/* Admin Profile Section */}
       <div className="mb-8">
         <AdminProfile />
@@ -12,19 +12,19 @@ const AdminDashboard = () => {
 
       {/* Close Admin Panel Button */}
       <div className="mb-8 text-center p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300">
-        <p className="text-2xl font-semibold text-black mb-4">
+        <p className="text-xl md:text-2xl font-semibold text-black mb-4">
           Back to User Dashboard?
         </p>
         <button
           onClick={() => navigate("/dashboard")}
-          className="px-8 py-1 bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white rounded-lg text-lg shadow-lg hover:opacity-90 transition duration-300"
+          className="px-8 py-1 text-sm bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-700 text-white rounded-lg md:text-lg shadow-lg hover:opacity-90 transition duration-300"
         >
           Close Admin Panel
         </button>
       </div>
 
       {/* Admin Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-6">
         <button
           onClick={() => navigate("/allusers")}
           className="w-full px-4 py-6 bg-white text-gray-800 font-medium bg-gradient-to-br from-white via-gray-100 to-gray-200 rounded-lg shadow-xl border border-gray-300 hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-1"

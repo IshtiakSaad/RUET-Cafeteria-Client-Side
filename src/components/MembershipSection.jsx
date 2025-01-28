@@ -42,7 +42,7 @@ const MembershipSection = () => {
       packageName: plan.name,
     };
     console.log(cartItem);
-    axios.post("http://localhost:3000/cart", cartItem).then((res) => console.log(res.data));
+    axios.post("https://ruet-hostel.vercel.app/cart", cartItem).then((res) => console.log(res.data));
 
     navigate(`/checkout/${plan.name}`);
   };

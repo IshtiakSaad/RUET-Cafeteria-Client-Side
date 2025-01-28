@@ -14,7 +14,7 @@ const Navbar = () => {
           <div className="dropdown">
             <button
               tabIndex={0}
-              className="btn btn-ghost lg:hidden focus:outline-none"
+              className="btn-sm btn btn-ghost lg:hidden focus:outline-none"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <svg
@@ -35,7 +35,7 @@ const Navbar = () => {
             {isDropdownOpen && (
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-white text-gray-700 rounded-md z-50 mt-3 w-48 p-2 shadow-lg"
+                className="menu menu-lg dropdown-content bg-white text-gray-700 rounded-md z-50 mt-3 w-60 p-2 shadow-lg"
               >
                 <li>
                   <a href="/">Home</a>
@@ -53,7 +53,7 @@ const Navbar = () => {
           {/* Logo */}
           <a
             href="/"
-            className="text-2xl font-semibold text-gray-800 hover:text-gray-600 transition-all tracking-wide"
+            className="lg:text-2xl font-semibold text-gray-800 hover:text-gray-600 transition-all tracking-wide"
           >
             RUET Hostel
           </a>
@@ -87,7 +87,7 @@ const Navbar = () => {
         <div className="navbar-end flex items-center space-x-4">
           {/* Notification Icon */}
           <button
-            className="btn btn-ghost focus:outline-none"
+            className="focus:outline-none"
             aria-label="Notifications"
           >
             <svg
@@ -121,7 +121,7 @@ const Navbar = () => {
               {isDropdownOpen && (
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content bg-white text-gray-700 rounded-md z-50 mt-3 w-48 p-2 shadow-lg"
+                  className="menu menu-lg dropdown-content bg-white text-gray-700 rounded-md z-50 mt-3 w-48 p-2 shadow-lg"
                 >
                   <li>
                     <span>{user.displayName}</span>
@@ -143,7 +143,7 @@ const Navbar = () => {
           ) : (
             <a
               href="/login"
-              className="btn bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-700 transition"
+              className="border-solid border-2 border-gray-800 rounded-full text-black px-4 py-1 hover:bg-gray-700 hover:text-gray-50 transition"
             >
               Join Us
             </a>

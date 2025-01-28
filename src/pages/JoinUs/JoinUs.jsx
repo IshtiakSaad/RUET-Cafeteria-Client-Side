@@ -50,7 +50,7 @@ const JoinUs = () => {
         console.log("User after updateProfile:", user);
 
         // Step 3: Save user data to MongoDB (if applicable)
-        await fetch("http://localhost:3000/users", {
+        await fetch("https://ruet-hostel.vercel.app/users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -20,7 +20,7 @@ const UpdateFood = () => {
   useEffect(() => {
     const fetchFoodDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/meals/${id}`);
+        const response = await axios.get(`https://ruet-hostel.vercel.app/meals/${id}`);
         const foodData = response.data;
 
         // Populate form fields with existing data
@@ -53,7 +53,7 @@ const UpdateFood = () => {
       };
       console.log(updatedFood);
       const response = await axios.put(
-        `http://localhost:3000/meals/${id}`,
+        `https://ruet-hostel.vercel.app/meals/${id}`,
         updatedFood
       );
       console.log("Res: ", response);
