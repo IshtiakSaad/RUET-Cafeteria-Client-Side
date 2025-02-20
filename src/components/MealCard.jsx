@@ -1,5 +1,5 @@
 const MealCard = ({ meal, onDetailsClick }) => {
-    const { title, image, rating, price, id } = meal;
+    const { title, image, rating, price, id, description } = meal;
   
     return (
       <div className="max-w-sm w-full mx-auto bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:shadow-2xl">
@@ -10,6 +10,7 @@ const MealCard = ({ meal, onDetailsClick }) => {
         />
         <div className="p-6">
           <h2 className="text-2xl font-extrabold text-gray-800 mb-2">{title}</h2>
+          <h2 className="text-md text-gray-600 mb-2">{description}</h2>
           <p className="text-sm text-gray-600 mb-2">Rating: ⭐ {rating}</p>
           <p className="text-lg font-semibold text-gray-700 mb-4">Price: ${price.toFixed(2)}</p>
           <button
