@@ -36,7 +36,7 @@ const SalesPromotions = () => {
                 <div className="text-6xl mb-6 text-gray-800 group-hover:scale-110 transition-transform">
                   {promo.icon}
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
+                <h3 className="text-2xl font-bold text-gray-900 transition-colors">
                   {promo.title}
                 </h3>
                 <p className="text-gray-600 mt-4">{promo.description}</p>

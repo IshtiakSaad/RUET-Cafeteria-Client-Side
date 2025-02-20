@@ -253,14 +253,14 @@ const MealDetailPage = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={handleLike}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
+                className="px-4 py-2 border-2 text-black rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
               >
                 {likeCount > 0 ? `${likeCount} Like` : "Like (0)"}
               </button>
               {currentMeal === "Available" && (
                 <button
                   onClick={handleRequestMeal}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition duration-300"
+                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition duration-300"
                 >
                   Request Meal
                 </button>
@@ -314,7 +314,7 @@ const MealDetailPage = () => {
             />
             <button
               onClick={handlePostReview}
-              className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg shadow-lg hover:bg-purple-700 transition duration-300"
+              className="mt-4 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-lg hover:bg-purple-700 transition duration-300"
             >
               Post Review
             </button>

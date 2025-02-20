@@ -65,7 +65,7 @@ const MealsByCategory = () => {
             key={category}
             className={`px-5 py-2 text-sm md:text-base rounded-full font-medium transition-all duration-300 shadow-md ${
               selectedCategory === category
-                ? "bg-gray-800 text-white hover:bg-gray-700"
+                ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:bg-gray-700"
                 : "bg-gray-200 text-gray-600 hover:bg-gray-300"
             }`}
             onClick={() =>
