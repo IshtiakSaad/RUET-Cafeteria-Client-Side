@@ -19,6 +19,7 @@ import AdminDashboard from "../pages/Dashboard/AdminDashboard";
 import RequestedMeals from "../pages/Dashboard/RequestedMeals";
 import EditReviewPage from "../pages/Dashboard/EditReviewPage";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import RulesAndGuidelines from "../pages/Rules/Rules";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
             <Checkout></Checkout>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "/rules",
+        element: <RulesAndGuidelines></RulesAndGuidelines>,
       },
       {
         path: "/addfood",
