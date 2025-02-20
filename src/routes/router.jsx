@@ -20,6 +20,7 @@ import RequestedMeals from "../pages/Dashboard/RequestedMeals";
 import EditReviewPage from "../pages/Dashboard/EditReviewPage";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import RulesAndGuidelines from "../pages/Rules/Rules";
+import Profile from "../pages/Dashboard/Profile";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,14 @@ const router = createBrowserRouter([
             <Checkout></Checkout>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "/profile",
+        element: (
+            <PrivateRoute>
+                <Profile></Profile>
+            </PrivateRoute>
+        )
       },
       {
         path: "/rules",

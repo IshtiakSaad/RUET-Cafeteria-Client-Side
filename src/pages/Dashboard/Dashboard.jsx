@@ -7,6 +7,28 @@ import useAuth from "../../hooks/useAuth";
 import useAdmin from "../../hooks/useAdmin";
 import toast from "react-hot-toast";
 import Pagination from "./Pagination";
+import { Bar, Line, Pie } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from "chart.js";
+
+// Register necessary chart components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
 
 const Dashboard = () => {
   const user = useAuth();
@@ -18,12 +40,15 @@ const Dashboard = () => {
   const BASE_URL = "https://ruet-hostel.vercel.app";
   const navigate = useNavigate();
 
+  //   console.log(user);
+
   useEffect(() => {
     let isMounted = true;
     if (user) {
       const fetchData = async () => {
         try {
-          const resMeals = (await axios.get(`${BASE_URL}/mealsbycategory`)).data;
+          const resMeals = (await axios.get(`${BASE_URL}/mealsbycategory`))
+            .data;
           if (isMounted) setAllMeals(resMeals);
 
           const fetchedBadge = (
@@ -47,7 +72,50 @@ const Dashboard = () => {
     };
   }, [user, BASE_URL]);
 
-  console.log(requestedMeals);
+  // Pie Chart Data for review distribution (positive, neutral, negative)
+  const reviewDistributionData = {
+    labels: ["Positive", "Neutral", "Negative"],
+    datasets: [
+      {
+        data: [
+          reviews.filter((review) => review.rating > 3).length,
+          reviews.filter((review) => review.rating === 3).length,
+          reviews.filter((review) => review.rating < 3).length,
+        ],
+        backgroundColor: ["#28a745", "#ffc107", "#dc3545"],
+      },
+    ],
+  };
+
+  // Bar Chart Data for meal requests over time (e.g., by month)
+  const mealRequestData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+    datasets: [
+      {
+        label: "Meals Requested",
+        data: [5, 10, 7, 12, 15], // replace with actual dynamic data
+        backgroundColor: "#007bff",
+        borderColor: "#0056b3",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  // Chart for average rating over time
+  const ratingOverTimeData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+    datasets: [
+      {
+        label: "Average Rating",
+        data: [4.2, 4.5, 4.3, 4.0, 4.6], // replace with actual dynamic data
+        fill: false,
+        borderColor: "#ffc107",
+        tension: 0.1,
+      },
+    ],
+  };
+
+  //   console.log(requestedMeals);
 
   useEffect(() => {
     const extractedReviews = [];
@@ -77,9 +145,9 @@ const Dashboard = () => {
         `${BASE_URL}/users/${user.user.uid}/favorites/${mealId}`,
         { method: "DELETE" }
       );
-      if(response.ok) toast.success("Request is Canceled.")
-      if (!response.ok){
-        toast.error("Failed to Cancel Your Request. Please Try Again!")
+      if (response.ok) toast.success("Request is Canceled.");
+      if (!response.ok) {
+        toast.error("Failed to Cancel Your Request. Please Try Again!");
         throw new Error("Failed to remove meal.");
       }
       setRequestedMeals((prev) => prev.filter((fav) => fav._id !== mealId));
@@ -167,6 +235,62 @@ const Dashboard = () => {
                 </div>
               </div>
             )}
+
+            <button
+              onClick={() => navigate("/profile")}
+              className="text-md border-2 btn btn-sm btn-warning font-semibold mt-4"
+            >
+              View Profile
+            </button>
+          </section>
+
+          <section className="bg-white shadow-lg rounded-2xl p-6">
+            <h2 className="text-2xl font-semibold mb-4">User Stats</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Total Meals Requested */}
+              <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-xl">
+                <h3 className="text-xl font-semibold">Total Meals Requested</h3>
+                <p className="text-3xl font-bold">{requestedMeals.length}</p>
+              </div>
+
+              {/* Total Reviews */}
+              <div className="bg-gradient-to-r from-green-500 to-teal-600 text-white p-6 rounded-xl">
+                <h3 className="text-xl font-semibold">Total Reviews</h3>
+                <p className="text-3xl font-bold">{reviews.length}</p>
+              </div>
+
+              {/* Badge */}
+              <div className="bg-gradient-to-r from-red-500 to-orange-600 text-white p-6 rounded-xl">
+                <h3 className="text-xl font-semibold">Badge</h3>
+                <p className="text-3xl font-bold">{badge}</p>
+              </div>
+            </div>
+
+            {/* Charts Section */}
+            <div className="mt-10">
+              <div className="bg-white p-6 rounded-xl shadow-md mb-6">
+                <h3 className="text-xl font-semibold mb-4">
+                  Review Distribution
+                </h3>
+                <div
+                  className="flex items-center justify-center"
+                  style={{ height: "400px" }}
+                >
+                  {reviews && reviews.length > 0 ? (
+                    <Pie data={reviewDistributionData} />
+                  ) : (
+                    <h2>No reviews found</h2>
+                  )}
+                </div>
+              </div>
+
+              {/* <div className="bg-white p-6 rounded-xl shadow-md mb-6">
+                <h3 className="text-xl font-semibold mb-4">
+                  Meal Requests by Month
+                </h3>
+                <Bar data={mealRequestData} />
+              </div> */}
+            </div>
           </section>
 
           {/* Requested Meals */}
@@ -250,7 +374,10 @@ const Dashboard = () => {
                             <td className="flex px-4 py-2 space-x-1">
                               <button
                                 onClick={() =>
-                                  handleEditReview(review.mealId, review.reviewId)
+                                  handleEditReview(
+                                    review.mealId,
+                                    review.reviewId
+                                  )
                                 }
                                 className="text-blue-600 hover:underline btn btn-sm btn-outline"
                               >
