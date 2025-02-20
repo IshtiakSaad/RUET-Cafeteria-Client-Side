@@ -87,36 +87,6 @@ const Dashboard = () => {
     ],
   };
 
-  // Bar Chart Data for meal requests over time (e.g., by month)
-  const mealRequestData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-    datasets: [
-      {
-        label: "Meals Requested",
-        data: [5, 10, 7, 12, 15], // replace with actual dynamic data
-        backgroundColor: "#007bff",
-        borderColor: "#0056b3",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  // Chart for average rating over time
-  const ratingOverTimeData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-    datasets: [
-      {
-        label: "Average Rating",
-        data: [4.2, 4.5, 4.3, 4.0, 4.6], // replace with actual dynamic data
-        fill: false,
-        borderColor: "#ffc107",
-        tension: 0.1,
-      },
-    ],
-  };
-
-  //   console.log(requestedMeals);
-
   useEffect(() => {
     const extractedReviews = [];
     allMeals.forEach((meal) => {
@@ -283,13 +253,6 @@ const Dashboard = () => {
                   )}
                 </div>
               </div>
-
-              {/* <div className="bg-white p-6 rounded-xl shadow-md mb-6">
-                <h3 className="text-xl font-semibold mb-4">
-                  Meal Requests by Month
-                </h3>
-                <Bar data={mealRequestData} />
-              </div> */}
             </div>
           </section>
 
